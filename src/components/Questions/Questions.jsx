@@ -5,8 +5,8 @@ function Questions() {
 
   return (
     <>
-      <div className={styles.main__quos}>
-        <h2 className={styles.main__title}>Вопросы React, JavaScript</h2>
+      <div className={styles.questions}>
+        <h2 className={styles.questions__title}>Вопросы React, JavaScript</h2>
         <div className={styles.spoilers}>
           <Spoiler title='Что такое Virtual DOM, и как он работает?'>
             <p>

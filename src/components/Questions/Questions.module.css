@@ -1,16 +1,23 @@
-.main__quos {
+.questions {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
   width: 804px;
   border-radius: 24px;
   padding: 24px 20px 40px;
   box-shadow: 0 4px 10px 0 rgba(106, 99, 118, 0.1);
   background: #fff;
 }
-.main__title {
+.questions__title {
   font-family: var(--font-family);
   font-weight: 500;
   font-size: 24px;
   line-height: 120%;
   color: #191919;
+
+  border-bottom: 0.5px solid #e8e8e8;
+  padding-bottom: 17px;
 }
 .spoilers {
   display: flex;
