@@ -1,0 +1,69 @@
+.spoiler__wrapper {
+  border-radius: 8px;
+  padding: 24px 0;
+  box-shadow: 0 4px 10px 0 rgba(106, 99, 118, 0.1);
+  background: #fff;
+  overflow: hidden;
+}
+
+/* Стили кнопки-шапки */
+.spoiler__header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  /* background: #f9f9f9; */
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+  transition: background 0.2s ease;
+}
+
+/* Анимация стрелочки */
+.spoiler__arrow {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+.spoiler__arrow[data-open="true"] {
+  transform: rotate(180deg);
+}
+
+/* Контейнер для контента с поддержкой плавной высоты */
+.spoiler__content {
+  display: grid;
+  grid-template-rows: 0fr; /* По умолчанию скрыто (высота 0) */
+  transition: grid-template-rows 0.3s cubic-bezier(0, 1, 0, 1);
+}
+
+/* Когда спойлер открыт — плавно увеличиваем grid-строку */
+.spoiler__content[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+
+/* Внутренний контейнер обязателен для работы CSS Grid анимации */
+.spoiler__inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Стилизуем ВСЕ элементы, которые вы передаете внутрь спойлера (p, div, ul и т.д.) */
+.spoiler__inner > * {
+  /* Задаем им отступы сверху и снизу вместо паддинга всего контейнера */
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin: 0; /* Сбрасываем дефолтные маргины, чтобы они не ломали высоту */
+}
+/* Если вы передаете просто голый текст без тегов, 
+   можно добавить боковые отступы для всего inner: */
+.spoiler__inner {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Добавляем внутренние отступы, только когда спойлер открыт */
+/* .spoiler__content[data-open="true"] .spoiler__inner {
+  padding: 15px;
+} */
