@@ -1,0 +1,56 @@
+.pagination {
+  display: flex;
+  gap: 10px;
+  margin: 0 auto;
+  padding-top: 16px;
+  width: 233px;
+
+  font-family: var(--font-family);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 120%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #474747;
+}
+.btn__left,
+.btn__right {
+  display: flex;
+  justify-content: center;
+  border: 1px solid #6a0bff;
+  border-radius: 23px;
+  width: 28px;
+  height: 28px;
+}
+.pages {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.page__link {
+  /* Делаем ссылку блочной */
+  display: inline-flex;
+  align-items: center; /* Вертикальное выравнивание */
+  justify-content: center; /* Горизонтальное выравнивание */
+  color: #474747;
+  text-decoration: none;
+}
+.page__current {
+  border-radius: 2px;
+  padding: 2px 6px;
+  width: 21px;
+  height: 25px;
+  background: #6a0bff;
+  color: #fff;
+}
+.page__hide_small {
+}
+.page__hide_medium {
+}
+.page__hide_large {
+}
+.dots {
+}
+.page__last {
+}

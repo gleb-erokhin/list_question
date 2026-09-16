@@ -1,3 +1,4 @@
+import Pagination from '../Pagination/Pagination'
 import Spoiler from '../Spoiler/Spoiler'
 import styles from './Questions.module.css'
 ""
@@ -24,6 +25,7 @@ function Questions() {
             </p>
           </Spoiler>
         </div>
+        <Pagination />
       </div>
     </>
   )
