@@ -1,9 +1,10 @@
 import styles from './Parameters.module.css'
+import Search from './Search'
 
 function Parameters() {
   return (
     <div className={styles.parameters}>
-      <input className={styles.input} type='text' placeholder='Введите запрос' />
+      <Search />
       <div className={styles.parameters__types}>
         <h3 className={styles.parameters__title}>Специализация</h3>
         <ul className={styles.tags}> 
