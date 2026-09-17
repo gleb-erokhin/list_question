@@ -1,3 +1,4 @@
+import Types from './BlockTypes/Types'
 import styles from './Parameters.module.css'
 import Search from './Search'
 
@@ -5,17 +6,7 @@ function Parameters() {
   return (
     <div className={styles.parameters}>
       <Search />
-      <div className={styles.parameters__types}>
-        <h3 className={styles.parameters__title}>Специализация</h3>
-        <ul className={styles.tags}> 
-          <li><button className={`${styles.tag} ${styles.selected}`}>Figma</button></li>
-          <li><button className={styles.tag}>UI/UX design</button></li>
-          <li><button className={styles.tag}>Frontend developer</button></li>
-          <li><button className={styles.tag}>Backend developer</button></li>
-          <li><button className={styles.tag}>Fullstack</button></li> 
-        </ul>
-        <a href="#" className={styles.viewAll}>Посмотреть всё</a>
-      </div>
+      <Types title='Специализация' />
       <div className={styles.parameters__types}>
         <h3 className={styles.parameters__title}>Навыки</h3>
         <ul className={styles.tags}> 
