@@ -12,7 +12,7 @@ function Pagination() {
         
           {/* <!-- Группируем первые страницы в один блок --> */}
           <div className={styles.pages}>
-            <a href="#" className={styles.page__link}>1</a>
+            <a href="#" className={`${styles.page__link}`}>1</a>
             <a href="#" className={`${styles.page__link} ${styles.page__current} ${styles.page__hide_small}`}>2</a>
             <a href="#" className={`${styles.page__link} ${styles.page__hide_medium}`}>3</a>
             <a href="#" className={`${styles.page__link} ${styles.page__hide_medium}`}>4</a>
