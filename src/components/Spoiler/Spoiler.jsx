@@ -24,7 +24,7 @@ function Spoiler({title, children, spoilerImg, reating, difficult}) {
           <span className={styles.spoiler__title}>{title}</span>{/* Стрелочка-индикатор */}
           <span className={styles.spoiler__arrow} data-open={isOpen}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 9L12 15L18 9" stroke="#6A0BFF" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M6 9L12 15L18 9" stroke="#6A0BFF" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </span>
         </button>

@@ -1,115 +1,23 @@
-import Types from './BlockTypes/Types'
+import Grade from './BlockTypes/Grade'
+import Qualifications from './BlockTypes/Qualifications'
+import Rank from './BlockTypes/Rank'
 import styles from './Parameters.module.css'
 import Search from './Search'
 
 function Parameters() {
+  const spec = ['UI/UX designe', 'Frontend developer', 'Backed developer', 'Fullstack', 'Figma']
+  const reatings = [1, 2, 3, 4, 5]
+  const difficult = ['1-3',' 4-6', '7-8', '9-10']
+  const status = ['Изученные', 'Не изученные', 'Все']
+
   return (
     <div className={styles.parameters}>
       <Search />
-      <Types title='Специализация' />
-      <div className={styles.parameters__types}>
-        <h3 className={styles.parameters__title}>Навыки</h3>
-        <ul className={styles.tags}> 
-          <li>
-            <button className={`${styles.tag} ${styles.selected}`}>
-            <span>
-              <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15.0351 15C15.0351 12.2386 17.2737 10 20.0351 10C22.7965 10 25.0351 12.2386 25.0351 15C25.0351 17.7614 22.7964 20 20.0351 20C17.2736 20 15.0351 17.7614 15.0351 15Z" fill="#00BCFF" />
-                <path d="M5.0351 25C5.0351 22.2386 7.27367 20 10.0351 20L12.6996 18.5933L15.0351 20V25C15.0351 27.7615 12.7965 30 10.0351 30C7.27367 30 5.0351 27.7614 5.0351 25Z" fill="#00CF7F" />
-                <path d="M15.0351 0L12.3144 4.72676L15.0351 9.99996H19.965C22.7264 9.99996 24.965 7.76139 24.965 4.99998C24.965 2.23857 22.7264 0 19.965 0H15.0351Z" fill="#FF7361" />
-                <path d="M4.9649 4.99998C4.9649 7.76139 7.20348 9.99996 9.96489 9.99996L12.6172 11.0244L15.035 9.99996V0H9.96483C7.20348 0 4.9649 2.23857 4.9649 4.99998Z" fill="#FF4D12" />
-                <path d="M5.0351 15C5.0351 17.7615 7.27367 20 10.0351 20H15.0351V10H10.0351C7.27367 10 5.0351 12.2386 5.0351 15Z" fill="#B659FF" />
-              </svg>
-            Figma
-            </span>
-            </button>
-          </li>
-          <li>
-            <button className={styles.tag}>            
-            <span>
-              <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15.0351 15C15.0351 12.2386 17.2737 10 20.0351 10C22.7965 10 25.0351 12.2386 25.0351 15C25.0351 17.7614 22.7964 20 20.0351 20C17.2736 20 15.0351 17.7614 15.0351 15Z" fill="#00BCFF" />
-                <path d="M5.0351 25C5.0351 22.2386 7.27367 20 10.0351 20L12.6996 18.5933L15.0351 20V25C15.0351 27.7615 12.7965 30 10.0351 30C7.27367 30 5.0351 27.7614 5.0351 25Z" fill="#00CF7F" />
-                <path d="M15.0351 0L12.3144 4.72676L15.0351 9.99996H19.965C22.7264 9.99996 24.965 7.76139 24.965 4.99998C24.965 2.23857 22.7264 0 19.965 0H15.0351Z" fill="#FF7361" />
-                <path d="M4.9649 4.99998C4.9649 7.76139 7.20348 9.99996 9.96489 9.99996L12.6172 11.0244L15.035 9.99996V0H9.96483C7.20348 0 4.9649 2.23857 4.9649 4.99998Z" fill="#FF4D12" />
-                <path d="M5.0351 15C5.0351 17.7615 7.27367 20 10.0351 20H15.0351V10H10.0351C7.27367 10 5.0351 12.2386 5.0351 15Z" fill="#B659FF" />
-              </svg>
-            CSS
-            </span>
-            </button>
-          </li>
-          <li>
-            <button className={styles.tag}>            
-            <span>
-              <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15.0351 15C15.0351 12.2386 17.2737 10 20.0351 10C22.7965 10 25.0351 12.2386 25.0351 15C25.0351 17.7614 22.7964 20 20.0351 20C17.2736 20 15.0351 17.7614 15.0351 15Z" fill="#00BCFF" />
-                <path d="M5.0351 25C5.0351 22.2386 7.27367 20 10.0351 20L12.6996 18.5933L15.0351 20V25C15.0351 27.7615 12.7965 30 10.0351 30C7.27367 30 5.0351 27.7614 5.0351 25Z" fill="#00CF7F" />
-                <path d="M15.0351 0L12.3144 4.72676L15.0351 9.99996H19.965C22.7264 9.99996 24.965 7.76139 24.965 4.99998C24.965 2.23857 22.7264 0 19.965 0H15.0351Z" fill="#FF7361" />
-                <path d="M4.9649 4.99998C4.9649 7.76139 7.20348 9.99996 9.96489 9.99996L12.6172 11.0244L15.035 9.99996V0H9.96483C7.20348 0 4.9649 2.23857 4.9649 4.99998Z" fill="#FF4D12" />
-                <path d="M5.0351 15C5.0351 17.7615 7.27367 20 10.0351 20H15.0351V10H10.0351C7.27367 10 5.0351 12.2386 5.0351 15Z" fill="#B659FF" />
-              </svg>
-            React.js
-            </span>
-            </button>
-          </li>
-          <li>
-            <button className={styles.tag}>            
-              <span>
-              <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15.0351 15C15.0351 12.2386 17.2737 10 20.0351 10C22.7965 10 25.0351 12.2386 25.0351 15C25.0351 17.7614 22.7964 20 20.0351 20C17.2736 20 15.0351 17.7614 15.0351 15Z" fill="#00BCFF" />
-                <path d="M5.0351 25C5.0351 22.2386 7.27367 20 10.0351 20L12.6996 18.5933L15.0351 20V25C15.0351 27.7615 12.7965 30 10.0351 30C7.27367 30 5.0351 27.7614 5.0351 25Z" fill="#00CF7F" />
-                <path d="M15.0351 0L12.3144 4.72676L15.0351 9.99996H19.965C22.7264 9.99996 24.965 7.76139 24.965 4.99998C24.965 2.23857 22.7264 0 19.965 0H15.0351Z" fill="#FF7361" />
-                <path d="M4.9649 4.99998C4.9649 7.76139 7.20348 9.99996 9.96489 9.99996L12.6172 11.0244L15.035 9.99996V0H9.96483C7.20348 0 4.9649 2.23857 4.9649 4.99998Z" fill="#FF4D12" />
-                <path d="M5.0351 15C5.0351 17.7615 7.27367 20 10.0351 20H15.0351V10H10.0351C7.27367 10 5.0351 12.2386 5.0351 15Z" fill="#B659FF" />
-              </svg>
-            Figma
-            </span>
-            </button>
-          </li>
-          <li>
-            <button className={styles.tag}>            
-              <span>
-              <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15.0351 15C15.0351 12.2386 17.2737 10 20.0351 10C22.7965 10 25.0351 12.2386 25.0351 15C25.0351 17.7614 22.7964 20 20.0351 20C17.2736 20 15.0351 17.7614 15.0351 15Z" fill="#00BCFF" />
-                <path d="M5.0351 25C5.0351 22.2386 7.27367 20 10.0351 20L12.6996 18.5933L15.0351 20V25C15.0351 27.7615 12.7965 30 10.0351 30C7.27367 30 5.0351 27.7614 5.0351 25Z" fill="#00CF7F" />
-                <path d="M15.0351 0L12.3144 4.72676L15.0351 9.99996H19.965C22.7264 9.99996 24.965 7.76139 24.965 4.99998C24.965 2.23857 22.7264 0 19.965 0H15.0351Z" fill="#FF7361" />
-                <path d="M4.9649 4.99998C4.9649 7.76139 7.20348 9.99996 9.96489 9.99996L12.6172 11.0244L15.035 9.99996V0H9.96483C7.20348 0 4.9649 2.23857 4.9649 4.99998Z" fill="#FF4D12" />
-                <path d="M5.0351 15C5.0351 17.7615 7.27367 20 10.0351 20H15.0351V10H10.0351C7.27367 10 5.0351 12.2386 5.0351 15Z" fill="#B659FF" />
-              </svg>
-            Wireframing
-            </span>
-            </button>
-          </li> 
-        </ul>
-        <a href="#" className={styles.viewAll}>Посмотреть всё</a>
-      </div>
-      <div className={styles.parameters__types}>
-        <h3 className={styles.parameters__title}>Уровень сложности</h3>
-         <ul className={styles.tags}> 
-          <li><button className={`${styles.tag} ${styles.selected}`}>1-3</button></li>
-          <li><button className={styles.tag}>4-6</button></li>
-          <li><button className={styles.tag}>7-8</button></li>
-          <li><button className={styles.tag}>9-10</button></li>
-        </ul>
-      </div>
-      <div className={styles.parameters__types}>
-        <h3 className={styles.parameters__title}>Рейтинг</h3>
-        <ul className={styles.tags}> 
-          <li><button className={`${styles.tag} ${styles.selected}`}>1</button></li>
-          <li><button className={styles.tag}>2</button></li>
-          <li><button className={styles.tag}>3</button></li>
-          <li><button className={styles.tag}>4</button></li>
-          <li><button className={styles.tag}>5</button></li>
-        </ul>
-      </div>
-      <div className={styles.parameters__types}>
-        <h3 className={styles.parameters__title}>Статус</h3>
-        <ul className={styles.tags}> 
-          <li><button className={`${styles.tag} ${styles.selected}`}>Изученные</button></li>
-          <li><button className={styles.tag}>Не изученные</button></li>
-          <li><button className={styles.tag}>Все</button></li>
-        </ul>
-      </div>
+      <Qualifications arrays={spec} title='Специализация' />
+      <Grade title='Навыки' />
+      <Rank arrays={difficult} title='Уровень сложности' />
+      <Rank arrays={reatings} title='Рейтинг' />
+      <Rank arrays={status} title='Статус' />
     </div>
   )
 }
