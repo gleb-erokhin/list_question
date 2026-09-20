@@ -53,3 +53,33 @@
   text-decoration-skip-ink: none;
   color: #5509cc;
 }
+/* кнопка показать всё */
+.toggleAllLink {
+  /* Сбрасываем стандартные стили браузера для кнопок */
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+
+  /* Делаем внешний вид ссылки */
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 14px;
+  text-align: left;
+  color: #5509cc; /* Цвет обычной ссылки */
+  text-decoration: underline;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* Эффект при наведении */
+.toggleAllLink:hover:not(:disabled) {
+  color: #004499;
+}
+
+/* Стили для заблокированного состояния, если тегов мало */
+.toggleAllLink:disabled {
+  color: #999999;
+  text-decoration: none;
+  cursor: not-allowed;
+}

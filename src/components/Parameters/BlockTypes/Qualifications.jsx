@@ -5,8 +5,10 @@ import styles from './../../Parameters/Parameters.module.css'
 const API_QFN = 'https://api.yeatwork.ru/specializations'
 
 function Qualifications({title}) {
-  const [items, setItems] = useState([]);
+  const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(true);
+    // Стейт для переключения режима развернутого списка
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     // Делаем GET-запрос к API
@@ -14,7 +16,7 @@ function Qualifications({title}) {
       .then(response => {
         console.log(response.data.data)
         // получаем конечный массив объектов
-        setItems(response.data.data);
+        setTags(response.data.data);
       })
       .catch(error => {
         console.error('Ошибка при запросе:', error);
@@ -25,16 +27,28 @@ function Qualifications({title}) {
   }, []); // Пустой массив, чтобы запрос сработал один раз при загрузке
 
   if (loading) return <p>Загрузка тегов...</p>;
+  // Вычисляем видимые теги
+  const visibleTags = isExpanded ? tags : tags.slice(0, 5);
+  // Проверяем, есть ли вообще смысл что-то раскрывать
+  const hasMoreThanFive = tags.length > 5;
 
   return (
     <div className={styles.parameters__types}>
       <h3 className={styles.parameters__title}>{title}</h3>
       <ul className={styles.tags}> 
-        {items.map((item) => (
-          <li key={item.id}><button className={`${styles.tag}`}>{item.title}</button></li>
+        {visibleTags.map((tag) => (
+          <li key={tag.id}><button className={`${styles.tag}`}>{tag.title}</button></li>
         ))}
       </ul>
-      <a href="#" className={styles.viewAll}>Посмотреть всё</a>
+      <button 
+        onClick={() => {
+          if (hasMoreThanFive) setIsExpanded(!isExpanded);
+        }}  
+        className={styles.toggleAllLink}
+        disabled={!hasMoreThanFive}
+      >
+        {isExpanded ? 'Свернуть' : 'Посмотреть всё'}
+      </button>
     </div>
   )
 }
