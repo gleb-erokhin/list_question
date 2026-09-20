@@ -1,6 +1,24 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import styles from './../../Parameters/Parameters.module.css'
+const API_SKILS = 'https://api.yeatwork.ru/skills'
 
 const Grade = ({title}) => {
+  const [tags, setTags] = useState([]);
+
+    useEffect(() => {
+    // Делаем GET-запрос к API
+    axios.get(API_SKILS)
+      .then(response => {
+        console.log("Skils tags", response.data.data)
+        // получаем конечный массив объектов
+        setTags(response.data.data);
+      })
+      .catch(error => {
+        console.error('Ошибка при запросе:', error);
+      })
+  }, []); // Пустой массив, чтобы запрос сработал один раз при загрузке
+
   return (
     <div className={styles.parameters__types}>
       <h3 className={styles.parameters__title}>{title}</h3>
