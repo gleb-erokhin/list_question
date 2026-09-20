@@ -1,30 +1,38 @@
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import Pagination from '../Pagination/Pagination'
 import Spoiler from '../Spoiler/Spoiler'
 import styles from './Questions.module.css'
-import virtualDom from './../../assets/img/virtualDom.png'
+
+const API_BASE = 'https://api.yeatwork.ru/questions/public-questions'
 
 function Questions() {
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    // Делаем GET-запрос к API
+    axios.get(API_BASE)
+      .then(response => {
+        // получаем конечный массив объектов
+        setItems(response.data.data);
+      })
+      .catch(error => {
+        console.error('Ошибка при запросе:', error);
+      });
+  }, []); // Пустой массив, чтобы запрос сработал один раз при загрузке
 
   return (
     <>
       <div className={styles.questions}>
         <h2 className={styles.questions__title}>Вопросы React, JavaScript</h2>
         <div className={styles.spoilers}>
-          <Spoiler title='Что такое Virtual DOM, и как он работает?' spoilerImg={virtualDom} reating={4} difficult={10}>
-            <p>
-              Virtual DOM (виртуальный DOM) — это программная концепция, используемая в разработке веб-приложений для повышения эффективности обновлений интерфейса. Это представление реального DOM (структуры документа, отображаемого в браузере) в памяти, которое позволяет оптимизировать изменения, минимизируя взаимодействие с реальным DOM, что ускоряет рендеринг и обновление страниц. При изменении данных приложения Virtual DOM сравнивает новое состояние с предыдущим и обновляет только те части реального DOM, которые изменились, вместо перерисовки всего документа.
-            </p>
-          </Spoiler>
-          <Spoiler title='Что такое Virtual DOM, и как он работает?' reating={5} difficult={1}>
-            <p>
-              Virtual DOM (виртуальный DOM) — это программная концепция, используемая в разработке веб-приложений для повышения эффективности обновлений интерфейса. Это представление реального DOM (структуры документа, отображаемого в браузере) в памяти, которое позволяет оптимизировать изменения, минимизируя взаимодействие с реальным DOM, что ускоряет рендеринг и обновление страниц. При изменении данных приложения Virtual DOM сравнивает новое состояние с предыдущим и обновляет только те части реального DOM, которые изменились, вместо перерисовки всего документа.
-            </p>
-          </Spoiler>
-          <Spoiler title='Что такое Virtual DOM, и как он работает?'>
-            <p>
-              Virtual DOM (виртуальный DOM) — это программная концепция, используемая в разработке веб-приложений для повышения эффективности обновлений интерфейса. Это представление реального DOM (структуры документа, отображаемого в браузере) в памяти, которое позволяет оптимизировать изменения, минимизируя взаимодействие с реальным DOM, что ускоряет рендеринг и обновление страниц. При изменении данных приложения Virtual DOM сравнивает новое состояние с предыдущим и обновляет только те части реального DOM, которые изменились, вместо перерисовки всего документа.
-            </p>
-          </Spoiler>
+          {
+            items.map((item) => {
+              return (<Spoiler key={item.id} title={item.title} spoilerImg={item.imageSec} reating={item.rate} difficult={item.complexity}>
+                <p>{item.shortAnswer}</p>
+              </Spoiler>)
+            })
+          }
         </div>
         <Pagination />
       </div>

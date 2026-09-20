@@ -8,11 +8,11 @@ function Spoiler({title, children, spoilerImg, reating, difficult}) {
 
    // 3. Функция для переключения состояния
   const toggleSpoiler = () => {
-    console.log('Клик сработал! Старое состояние:', isOpen);
+    // console.log('Клик сработал! Старое состояние:', isOpen);
     setIsOpen((prev) => !prev); // Инвертируем текущее значение (true -> false / false -> true)
   };
 
-  console.log('Компонент перерисован. Текущий isOpen:', isOpen); 
+  // console.log('Компонент перерисован. Текущий isOpen:', isOpen); 
 
   return (
     <>
