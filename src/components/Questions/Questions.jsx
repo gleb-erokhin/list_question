@@ -8,6 +8,7 @@ const API_BASE = 'https://api.yeatwork.ru/questions/public-questions'
 
 function Questions() {
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Делаем GET-запрос к API
@@ -18,8 +19,13 @@ function Questions() {
       })
       .catch(error => {
         console.error('Ошибка при запросе:', error);
-      });
+      })
+      .finally(() => {
+        setLoading(false)
+      });;
   }, []); // Пустой массив, чтобы запрос сработал один раз при загрузке
+
+  if (loading) return <div>Загрузка вопросов...</div>;
 
   return (
     <>
