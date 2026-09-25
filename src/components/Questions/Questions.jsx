@@ -20,12 +20,7 @@ function Questions() {
       .catch(error => {
         console.error('Ошибка при запросе:', error);
       });
-      // .finally(() => {
-      //   setLoading(false)
-      // });
   }, []); // Пустой массив, чтобы запрос сработал один раз при загрузке
-
-  // if (loading) return <div>Загрузка вопросов...</div>;
 
   return (
     <>
@@ -34,7 +29,7 @@ function Questions() {
         <div className={styles.spoilers}>
           {
             items.map((item) => {
-              return (<Spoiler key={item.id} title={item.title} spoilerImg={item.imageSec} reating={item.rate} difficult={item.complexity}>
+              return (<Spoiler key={item.id} title={item.title} spoilerImg={item.imageSrc} reating={item.rate} difficult={item.complexity}>
                 <p>{item.shortAnswer}</p>
               </Spoiler>)
             })
