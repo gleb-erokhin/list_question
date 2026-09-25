@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
+import { API_BASE } from '../../../apiCondig';
 import axios from 'axios';
 import styles from './../../Parameters/Parameters.module.css'
-const API_SKILS = 'https://api.yeatwork.ru/skills'
 
 const Grade = ({title}) => {
   const [tags, setTags] = useState([]);
@@ -9,7 +9,7 @@ const Grade = ({title}) => {
 
     useEffect(() => {
     // Делаем GET-запрос к API
-    axios.get(API_SKILS)
+    axios.get(API_BASE + 'skills')
       .then(response => {
         // console.log("Skils tags", response.data.data)
         // получаем конечный массив объектов

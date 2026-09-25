@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
+import { API_BASE } from '../../apiCondig';
 import axios from 'axios';
 import Pagination from '../Pagination/Pagination'
 import Spoiler from '../Spoiler/Spoiler'
 import styles from './Questions.module.css'
-
-const API_BASE = 'https://api.yeatwork.ru/questions/public-questions'
 
 function Questions() {
   const [items, setItems] = useState([]);
@@ -12,7 +11,7 @@ function Questions() {
 
   useEffect(() => {
     // Делаем GET-запрос к API
-    axios.get(API_BASE)
+    axios.get(API_BASE + 'questions/public-questions')
       .then(response => {
         // получаем конечный массив объектов
         setItems(response.data.data);

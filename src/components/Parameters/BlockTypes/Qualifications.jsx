@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
+import { API_BASE } from './../../../apiCondig'
 import axios from 'axios';
 
 import styles from './../../Parameters/Parameters.module.css'
-const API_QFN = 'https://api.yeatwork.ru/specializations'
 
 function Qualifications({title}) {
   const [tags, setTags] = useState([]);
@@ -12,7 +12,7 @@ function Qualifications({title}) {
 
   useEffect(() => {
     // Делаем GET-запрос к API
-    axios.get(API_QFN)
+    axios.get(API_BASE + 'specializations')
       .then(response => {
         console.log(response.data.data)
         // получаем конечный массив объектов
