@@ -13,6 +13,7 @@ function Questions() {
     // Делаем GET-запрос к API
     axios.get(API_BASE + 'questions/public-questions')
       .then(response => {
+        console.log('public-questions', response.data.data)
         // получаем конечный массив объектов
         setItems(response.data.data);
       })
@@ -28,9 +29,14 @@ function Questions() {
         <div className={styles.spoilers}>
           {
             items.map((item) => {
-              return (<Spoiler key={item.id} title={item.title} spoilerImg={item.imageSrc} reating={item.rate} difficult={item.complexity}>
-                <p>{item.shortAnswer}</p>
-              </Spoiler>)
+              return (
+                <Spoiler key={item.id} title={item.title} spoilerImg={item.imageSrc} reating={item.rate} difficult={item.complexity}>
+                  <p>
+                    {item.shortAnswer} <br />
+                  </p>
+                  {/* <a className={styles.spoiler__more} htef="" >Подробнее</a> */}
+                </Spoiler>
+              )
             })
           }
         </div>

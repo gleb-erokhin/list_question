@@ -14,7 +14,7 @@ function Qualifications({title}) {
     // Делаем GET-запрос к API
     axios.get(API_BASE + 'specializations')
       .then(response => {
-        console.log(response.data.data)
+        console.log('specializations', response.data.data)
         // получаем конечный массив объектов
         setTags(response.data.data);
       })
