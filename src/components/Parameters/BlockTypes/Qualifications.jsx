@@ -1,44 +1,31 @@
-import { useEffect, useState } from 'react';
-import { API_BASE } from './../../../apiCondig'
-import axios from 'axios';
-
+import { useState } from 'react';
 import styles from './../../Parameters/Parameters.module.css'
 
-function Qualifications({title}) {
-  const [tags, setTags] = useState([]);
-  const [loading, setLoading] = useState(true);
-    // Стейт для переключения режима развернутого списка
+function Qualifications({ title, items = [], activeFilter, setActiveFilter }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  useEffect(() => {
-    // Делаем GET-запрос к API
-    axios.get(API_BASE + 'specializations')
-      .then(response => {
-        console.log('specializations', response.data.data)
-        // получаем конечный массив объектов
-        setTags(response.data.data);
-      })
-      .catch(error => {
-        console.error('Ошибка при запросе:', error);
-      })
-      .finally(() => {
-        setLoading(false)
-      });
-  }, []); // Пустой массив, чтобы запрос сработал один раз при загрузке
-
-  if (loading) return <p>Загрузка тегов...</p>;
-  // Вычисляем видимые теги
-  const visibleTags = isExpanded ? tags : tags.slice(0, 5);
-  // Проверяем, есть ли вообще смысл что-то раскрывать
-  const hasMoreThanFive = tags.length > 5;
+  // Ограничиваем показ кнопок
+  const visibleItems = isExpanded ? items : items.slice(0, 5);
+  const hasMoreThanFive = items.length > 5;
 
   return (
     <div className={styles.parameters__types}>
       <h3 className={styles.parameters__title}>{title}</h3>
       <ul className={styles.tags}> 
-        {visibleTags.map((tag) => (
-          <li key={tag.id}><button className={`${styles.tag}`}>{tag.title}</button></li>
-        ))}
+        {visibleItems.map((item) => {
+          const isSelected = activeFilter?.type === 'specialization' && activeFilter?.id === item.id;
+          return (
+            <li key={item.id}>
+              <button className={`${styles.tag}`}
+                onClick={()=> setActiveFilter({ type: 'specialization', id: item.id })}
+                style={{ fontWeight: isSelected ? 'bold' : 'normal' }}
+              >
+                {item.title}
+              </button>
+            </li>
+          )
+          })
+        }
       </ul>
       <button 
         onClick={() => {
@@ -46,6 +33,7 @@ function Qualifications({title}) {
         }}  
         className={styles.toggleAllLink}
         disabled={!hasMoreThanFive}
+        style={{ background: 'none', border: 'none', textDecoration: hasMoreThanFive ? 'underline' : 'none' }}
       >
         {isExpanded ? 'Свернуть' : 'Посмотреть всё'}
       </button>

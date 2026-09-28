@@ -1,26 +1,8 @@
-import { useEffect, useState } from 'react';
-import { API_BASE } from '../../apiCondig';
-import axios from 'axios';
 import Pagination from '../Pagination/Pagination'
 import Spoiler from '../Spoiler/Spoiler'
 import styles from './Questions.module.css'
 
-function Questions() {
-  const [items, setItems] = useState([]);
-  // const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Делаем GET-запрос к API
-    axios.get(API_BASE + 'questions/public-questions')
-      .then(response => {
-        console.log('public-questions', response.data.data)
-        // получаем конечный массив объектов
-        setItems(response.data.data);
-      })
-      .catch(error => {
-        console.error('Ошибка при запросе:', error);
-      });
-  }, []); // Пустой массив, чтобы запрос сработал один раз при загрузке
+function Questions({ items }) {
 
   return (
     <>
