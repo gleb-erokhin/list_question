@@ -10,6 +10,7 @@ function Parameters({specializations, skills, activeFilter, setActiveFilter}) {
   const difficult = ['1-3',' 4-6', '7-8', '9-10']
   const status = ['Изученные', 'Не изученные', 'Все']
 
+  console.log('2. Проводник specializations:', specializations);
   return (
     <div className={styles.parameters}>
       <Search />

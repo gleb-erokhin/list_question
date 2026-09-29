@@ -45,6 +45,10 @@ function Main() {
     });
   });
 
+  // ВРЕМЕННЫЙ ТЕСТ: искусственно добавляем 6-й и 7-й элементы
+  // uniqueSpecs.push({ id: 999, title: 'Тестовый тег 1' });
+  // uniqueSpecs.push({ id: 888, title: 'Тестовый тег 2' });
+
   // 3. Логика фильтрации: отсекаем вопросы, не подходящие под фильтр
   const filteredQuestions = questions.filter(question => {
     if (!activeFilter) return true; // Показать все
@@ -57,6 +61,8 @@ function Main() {
     }
     return true;
   });
+
+  console.log('1. Родоначальник uniqueSpecs:', uniqueSpecs);
 
   return (
     <main className={styles.main}>

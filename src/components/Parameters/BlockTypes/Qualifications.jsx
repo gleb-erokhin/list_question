@@ -8,6 +8,9 @@ function Qualifications({ title, items = [], activeFilter, setActiveFilter }) {
   const visibleItems = isExpanded ? items : items.slice(0, 5);
   const hasMoreThanFive = items.length > 5;
 
+  console.log('3. Получатель items:', items);
+  console.log('Сколько всего специализаций пришло в компонент:', items.length);
+
   return (
     <div className={styles.parameters__types}>
       <h3 className={styles.parameters__title}>{title}</h3>
