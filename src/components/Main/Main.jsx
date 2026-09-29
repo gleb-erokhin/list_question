@@ -8,7 +8,8 @@ import styles from './Main.module.css'
 function Main() {
   const [questions, setQuestions] = useState([]);
   // Стейт фильтра: { type: 'specialization' | 'skill', id: number } или null
-  const [activeFilter, setActiveFilter] = useState(null); 
+ // ТЕПЕРЬ ЭТО МАССИВ: хранит ID только активных специализаций, например: [1, 2]
+  const [activeSpecializations, setActiveSpecializations] = useState([]);  
 
   useEffect(() => {
     // Делаем один запрос по твоему принципу склеивания строк
@@ -45,24 +46,31 @@ function Main() {
     });
   });
 
-  // ВРЕМЕННЫЙ ТЕСТ: искусственно добавляем 6-й и 7-й элементы
-  // uniqueSpecs.push({ id: 999, title: 'Тестовый тег 1' });
-  // uniqueSpecs.push({ id: 888, title: 'Тестовый тег 2' });
-
-  // 3. Логика фильтрации: отсекаем вопросы, не подходящие под фильтр
   const filteredQuestions = questions.filter(question => {
-    if (!activeFilter) return true; // Показать все
+    // 1. Если фильтры не выбраны — показываем все 10 вопросов
+    if (activeSpecializations.length === 0) return true;
 
-    if (activeFilter.type === 'specialization') {
-      return question.questionSpecializations?.some(s => s.id === activeFilter.id);
-    }
-    if (activeFilter.type === 'skill') {
-      return question.questionSkills?.some(s => s.id === activeFilter.id);
-    }
-    return true;
+    // 2. Переводим все выбранные в фильтре ID в строки для безопасности ("11")
+    const stringActiveIds = activeSpecializations.map(id => id.toString());
+
+    // 3. Проверяем вложенный массив специализаций вопроса
+    const hasMatch = question.questionSpecializations?.some(spec => {
+      if (!spec || !spec.id) return false;
+
+      // Сравниваем строго как строки, чтобы избежать проблем с типами данных
+      return stringActiveIds.includes(spec.id.toString());
+    });
+
+    // ВРЕМЕННЫЙ ЛОГ: Показывает логику для каждого вопроса в консоли
+    console.log(
+      `Вопрос ID: ${question.id}, Ищет совпадение для:`, stringActiveIds, 
+      `У вопроса есть ID специализаций:`, question.questionSpecializations?.map(s => s.id?.toString()),
+      `Результат проверки:`, hasMatch
+    );
+
+    return hasMatch;
   });
 
-  console.log('1. Родоначальник uniqueSpecs:', uniqueSpecs);
 
   return (
     <main className={styles.main}>
@@ -73,8 +81,8 @@ function Main() {
         <Parameters 
           specializations={uniqueSpecs}
           skills={uniqueSkills}
-          activeFilter={activeFilter}
-          setActiveFilter={setActiveFilter}
+          activeSpecializations={activeSpecializations}
+          setActiveSpecializations={setActiveSpecializations}
         />
       </section>
     </main>

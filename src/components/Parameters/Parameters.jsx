@@ -4,7 +4,7 @@ import Rank from './BlockTypes/Rank'
 import styles from './Parameters.module.css'
 import Search from './Search'
 
-function Parameters({specializations, skills, activeFilter, setActiveFilter}) {
+function Parameters({specializations, skills, activeSpecializations, setActiveSpecializations}) {
   // const spec = ['UI/UX designe', 'Frontend developer', 'Backed developer', 'Fullstack', 'Figma']
   const reatings = [1, 2, 3, 4, 5]
   const difficult = ['1-3',' 4-6', '7-8', '9-10']
@@ -16,8 +16,8 @@ function Parameters({specializations, skills, activeFilter, setActiveFilter}) {
       <Search />
       {/* Кнопка «Все вопросы» для сброса фильтрации */}
       <button
-        onClick={() => setActiveFilter(null)}
-        style={{ fontWeight: activeFilter === null ? 'bold' : 'normal', marginBottom: '10px' }}
+        onClick={() => setActiveSpecializations(null)}
+        style={{ fontWeight: activeSpecializations === null ? 'bold' : 'normal', marginBottom: '10px' }}
       >
         Все вопросы
       </button>
@@ -25,15 +25,15 @@ function Parameters({specializations, skills, activeFilter, setActiveFilter}) {
       <Qualifications 
         title='Специализация'
         items={specializations}
-        activeFilter={activeFilter}
-        setActiveFilter={setActiveFilter}
+        activeSpecializations={activeSpecializations}
+        setActiveSpecializations={setActiveSpecializations}
       />
       {/* Передаем массив навыков и стейты фильтра вниз */}
       <Grade 
         title='Навыки'
         items={skills}
-        activeFilter={activeFilter}
-        setActiveFilter={setActiveFilter}
+        // activeFilter={activeFilter}
+        // setActiveFilter={setActiveFilter}
       />
       <Rank arrays={difficult} title='Уровень сложности' />
       <Rank arrays={reatings} title='Рейтинг' />
