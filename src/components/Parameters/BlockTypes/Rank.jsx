@@ -1,6 +1,7 @@
 import styles from './../../Parameters/Parameters.module.css'
 
 function Rank({ title, arrays = [], activeItems = [], setActiveItems }) {
+    // универсальная логика множественного выбора handleToggleItem(value). он подхватывает новые пропсы автоматически и работает на Уровень сложности, рейтинг и статус.
     const handleToggleItem = (value) => {
     // Если функции управления не переданы (например, для Рейтинга, который мы еще не настроили),
     // чтобы код не падал, просто выходим из функции
