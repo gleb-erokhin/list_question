@@ -10,6 +10,7 @@ function Main() {
   // Стейт фильтра: { type: 'specialization' | 'skill', id: number } или null
  // МАССИВ: хранит ID только активных специализаций, например: [1, 2]
   const [activeSpecializations, setActiveSpecializations] = useState([]);  
+  const [activeSkills, setActiveSkills] = useState([]); 
 
   useEffect(() => {
     // Делаем один запрос по твоему принципу склеивания строк
@@ -26,7 +27,7 @@ function Main() {
   const specMap = new Map();
   questions.forEach(q => {
     q.questionSpecializations?.forEach(spec => {
-      console.log('spec', spec)
+      // console.log('spec', spec)
       if (!specMap.has(spec.id)) {
         specMap.set(spec.id, true);
         uniqueSpecs.push({ id: spec.id, title: spec.title });
@@ -46,14 +47,30 @@ function Main() {
     });
   });
 
-  // Логика МНОЖЕСТВЕННОЙ фильтрации вопросов
-  const filteredQuestions = questions.filter(question => {
-    // Если ни одна специализация не выбрана — показываем абсолютно все вопросы
-    if (activeSpecializations.length === 0) return true;
+  // // Логика МНОЖЕСТВЕННОЙ фильтрации вопросов
+  // const filteredQuestions = questions.filter(question => {
+  //   // Если ни одна специализация не выбрана — показываем абсолютно все вопросы
+  //   if (activeSpecializations.length === 0) return true;
 
-    // Проверяем, есть ли у вопроса хотя бы одна специализация из выбранных на панели
-    return question.questionSpecializations?.some(s => activeSpecializations.includes(s.id));
+  //   // Проверяем, есть ли у вопроса хотя бы одна специализация из выбранных на панели
+  //   return question.questionSpecializations?.some(s => activeSpecializations.includes(s.id));
+  // });
+
+    // Логика фильтрации: Специализации И Навыки
+  const filteredQuestions = questions.filter(question => {
+    // 1. Проверка по специализациям
+    const matchSpecs = activeSpecializations.length === 0 || 
+      question.questionSpecializations?.some(s => activeSpecializations.includes(s.id));
+
+    // 2. Проверка по навыкам
+    const matchSkills = activeSkills.length === 0 || 
+      question.questionSkills?.some(s => activeSkills.includes(s.id));
+
+    // Вопрос остается, если прошел ОБЕ проверки одновременно
+    return matchSpecs && matchSkills;
   });
+
+  // console.log('1. Родоначальник uniqueSpecs:', uniqueSpecs);
 
   return (
     <main className={styles.main}>
@@ -63,9 +80,11 @@ function Main() {
         {/* 5. Передаем списки и управление фильтром в блок параметров */}
         <Parameters 
           specializations={uniqueSpecs}
-          skills={uniqueSkills}
           activeSpecializations={activeSpecializations}
           setActiveSpecializations={setActiveSpecializations}
+          skills={uniqueSkills}
+          activeSkills={activeSkills}
+          setActiveSkills={setActiveSkills}
         />
       </section>
     </main>

@@ -19,6 +19,8 @@ function Qualifications({ title, items = [], activeSpecializations, setActiveSpe
     }
   };
 
+  // console.log('3. Получатель items:', items);
+
   return (
     <div className={styles.parameters__types}>
       <h3 className={styles.parameters__title}>{title}</h3>

@@ -4,13 +4,15 @@ import Rank from './BlockTypes/Rank'
 import styles from './Parameters.module.css'
 import Search from './Search'
 
-function Parameters({specializations, skills, activeSpecializations, setActiveSpecializations}) {
+function Parameters({ specializations, skills, activeSpecializations, setActiveSpecializations, activeSkills,
+  setActiveSkills }) {
   // const spec = ['UI/UX designe', 'Frontend developer', 'Backed developer', 'Fullstack', 'Figma']
   const reatings = [1, 2, 3, 4, 5]
   const difficult = ['1-3',' 4-6', '7-8', '9-10']
   const status = ['Изученные', 'Не изученные', 'Все']
 
-  console.log('2. Проводник specializations:', specializations);
+  // console.log('2. Проводник specializations:', specializations);
+
   return (
     <div className={styles.parameters}>
       <Search />
@@ -25,8 +27,8 @@ function Parameters({specializations, skills, activeSpecializations, setActiveSp
       <Grade 
         title='Навыки'
         items={skills}
-        // activeFilter={activeFilter}
-        // setActiveFilter={setActiveFilter}
+        activeSkills={activeSkills}
+        setActiveSkills={setActiveSkills}
       />
       <Rank arrays={difficult} title='Уровень сложности' />
       <Rank arrays={reatings} title='Рейтинг' />
