@@ -11,6 +11,7 @@ function Main() {
  // МАССИВ: хранит ID только активных специализаций, например: [1, 2]
   const [activeSpecializations, setActiveSpecializations] = useState([]);  
   const [activeSkills, setActiveSkills] = useState([]); 
+  const [activeDifficulties, setActiveDifficulties] = useState([]); // Новый стейт для сложности
 
   useEffect(() => {
     // Делаем один запрос по твоему принципу склеивания строк
@@ -47,16 +48,7 @@ function Main() {
     });
   });
 
-  // // Логика МНОЖЕСТВЕННОЙ фильтрации вопросов
-  // const filteredQuestions = questions.filter(question => {
-  //   // Если ни одна специализация не выбрана — показываем абсолютно все вопросы
-  //   if (activeSpecializations.length === 0) return true;
-
-  //   // Проверяем, есть ли у вопроса хотя бы одна специализация из выбранных на панели
-  //   return question.questionSpecializations?.some(s => activeSpecializations.includes(s.id));
-  // });
-
-    // Логика фильтрации: Специализации И Навыки
+    // ГЛУБОКАЯ ФИЛЬТРАЦИЯ ВОПРОСОВ
   const filteredQuestions = questions.filter(question => {
     // 1. Проверка по специализациям
     const matchSpecs = activeSpecializations.length === 0 || 
@@ -66,8 +58,18 @@ function Main() {
     const matchSkills = activeSkills.length === 0 || 
       question.questionSkills?.some(s => activeSkills.includes(s.id));
 
-    // Вопрос остается, если прошел ОБЕ проверки одновременно
-    return matchSpecs && matchSkills;
+    // 3. Фильтр по уровню сложности ( complexity )
+    const matchDifficulty = activeDifficulties.length === 0 || 
+      activeDifficulties.some(range => {
+        // Разбираем строку типа '1-3' или ' 4-6' на два числа:мин и макс
+        const [min, max] = range.split('-').map(num => parseInt(num.trim(), 10));
+        const comp = question.complexity;
+        // Проверяем, входит ли сложность вопроса в этот промежуток
+        return comp >= min && comp <= max;
+      });
+
+    // Вопрос остается, если прошел ВСЕ включенные фильтры одновременно (логика "И")
+    return matchSpecs && matchSkills && matchDifficulty;
   });
 
   // console.log('1. Родоначальник uniqueSpecs:', uniqueSpecs);
@@ -82,9 +84,13 @@ function Main() {
           specializations={uniqueSpecs}
           activeSpecializations={activeSpecializations}
           setActiveSpecializations={setActiveSpecializations}
+
           skills={uniqueSkills}
           activeSkills={activeSkills}
           setActiveSkills={setActiveSkills}
+
+          activeDifficulties={activeDifficulties}
+          setActiveDifficulties={setActiveDifficulties}
         />
       </section>
     </main>
