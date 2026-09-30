@@ -14,13 +14,6 @@ function Parameters({specializations, skills, activeSpecializations, setActiveSp
   return (
     <div className={styles.parameters}>
       <Search />
-      {/* Кнопка «Все вопросы» для сброса фильтрации */}
-      <button
-        onClick={() => setActiveSpecializations(null)}
-        style={{ fontWeight: activeSpecializations === null ? 'bold' : 'normal', marginBottom: '10px' }}
-      >
-        Все вопросы
-      </button>
       {/* Передаем массив специализаций и стейты фильтра вниз */}
       <Qualifications 
         title='Специализация'

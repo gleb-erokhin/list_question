@@ -8,7 +8,7 @@ import styles from './Main.module.css'
 function Main() {
   const [questions, setQuestions] = useState([]);
   // Стейт фильтра: { type: 'specialization' | 'skill', id: number } или null
- // ТЕПЕРЬ ЭТО МАССИВ: хранит ID только активных специализаций, например: [1, 2]
+ // МАССИВ: хранит ID только активных специализаций, например: [1, 2]
   const [activeSpecializations, setActiveSpecializations] = useState([]);  
 
   useEffect(() => {
@@ -46,31 +46,14 @@ function Main() {
     });
   });
 
+  // Логика МНОЖЕСТВЕННОЙ фильтрации вопросов
   const filteredQuestions = questions.filter(question => {
-    // 1. Если фильтры не выбраны — показываем все 10 вопросов
+    // Если ни одна специализация не выбрана — показываем абсолютно все вопросы
     if (activeSpecializations.length === 0) return true;
 
-    // 2. Переводим все выбранные в фильтре ID в строки для безопасности ("11")
-    const stringActiveIds = activeSpecializations.map(id => id.toString());
-
-    // 3. Проверяем вложенный массив специализаций вопроса
-    const hasMatch = question.questionSpecializations?.some(spec => {
-      if (!spec || !spec.id) return false;
-
-      // Сравниваем строго как строки, чтобы избежать проблем с типами данных
-      return stringActiveIds.includes(spec.id.toString());
-    });
-
-    // ВРЕМЕННЫЙ ЛОГ: Показывает логику для каждого вопроса в консоли
-    console.log(
-      `Вопрос ID: ${question.id}, Ищет совпадение для:`, stringActiveIds, 
-      `У вопроса есть ID специализаций:`, question.questionSpecializations?.map(s => s.id?.toString()),
-      `Результат проверки:`, hasMatch
-    );
-
-    return hasMatch;
+    // Проверяем, есть ли у вопроса хотя бы одна специализация из выбранных на панели
+    return question.questionSpecializations?.some(s => activeSpecializations.includes(s.id));
   });
-
 
   return (
     <main className={styles.main}>

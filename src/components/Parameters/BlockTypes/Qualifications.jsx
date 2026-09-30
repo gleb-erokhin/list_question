@@ -10,20 +10,14 @@ function Qualifications({ title, items = [], activeSpecializations, setActiveSpe
 
     // Функция-обработчик клика по конкретной кнопке
   const handleToggleSpecialization = (id) => {
-    setActiveSpecializations((prevSelected) => {
-      // prevSelected — это гарантированно актуальное предыдущее состояние массива
-      if (prevSelected.includes(id)) {
-        // Удаляем элемент: метод .filter() ВСЕГДА возвращает новый массив с новой ссылкой
-        return prevSelected.filter(activeId => activeId !== id);
-      } else {
-        // Добавляем элемент: создаем полностью новый массив через [...]
-        return [...prevSelected, id];
-      }
-    });
+    if (activeSpecializations.includes(id)) {
+      // Если кнопка уже активна — убираем её ID из списка
+      setActiveSpecializations(activeSpecializations.filter(activeId => activeId !== id));
+    } else {
+      // Если кнопка не активна — добавляем её ID к остальным активным
+      setActiveSpecializations([...activeSpecializations, id]);
+    }
   };
-
-  console.log('3. Получатель items:', items);
-  console.log('Сколько всего специализаций пришло в компонент:', items.length);
 
   return (
     <div className={styles.parameters__types}>
@@ -36,9 +30,8 @@ function Qualifications({ title, items = [], activeSpecializations, setActiveSpe
 
           return (
             <li key={item.id}>
-              <button className={`${styles.tag}`}
+              <button className={`${styles.tag} ${isSelected ? styles.selected : null}`}
                 onClick={()=> handleToggleSpecialization(item.id)}
-                style={{ fontWeight: isSelected ? 'bold' : 'normal' }}
               >
                 {item.title}
               </button>
