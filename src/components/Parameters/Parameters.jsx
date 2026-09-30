@@ -5,9 +5,8 @@ import styles from './Parameters.module.css'
 import Search from './Search'
 
 function Parameters({ specializations, skills, activeSpecializations, setActiveSpecializations, activeSkills,
-  setActiveSkills, activeDifficulties, setActiveDifficulties }) {
-  // const spec = ['UI/UX designe', 'Frontend developer', 'Backed developer', 'Fullstack', 'Figma']
-  const reatings = [1, 2, 3, 4, 5]
+  setActiveSkills, activeDifficulties, setActiveDifficulties, activeRatings, setActiveRatings }) {
+    
   const difficult = ['1-3',' 4-6', '7-8', '9-10']
   const status = ['Изученные', 'Не изученные', 'Все']
 
@@ -36,7 +35,12 @@ function Parameters({ specializations, skills, activeSpecializations, setActiveS
         activeItems={activeDifficulties}
         setActiveItems={setActiveDifficulties}
       />
-      <Rank arrays={reatings} title='Рейтинг' />
+      <Rank 
+        arrays={[1, 2, 3, 4, 5]} 
+        title='Рейтинг' 
+        activeItems={activeRatings}
+        setActiveItems={setActiveRatings}
+      />
       <Rank arrays={status} title='Статус' />
     </div>
   )

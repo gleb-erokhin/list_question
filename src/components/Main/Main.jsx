@@ -12,6 +12,7 @@ function Main() {
   const [activeSpecializations, setActiveSpecializations] = useState([]);  
   const [activeSkills, setActiveSkills] = useState([]); 
   const [activeDifficulties, setActiveDifficulties] = useState([]); // Новый стейт для сложности
+  const [activeRatings, setActiveRatings] = useState([]);
 
   useEffect(() => {
     // Делаем один запрос по твоему принципу склеивания строк
@@ -68,8 +69,13 @@ function Main() {
         return comp >= min && comp <= max;
       });
 
-    // Вопрос остается, если прошел ВСЕ включенные фильтры одновременно (логика "И")
-    return matchSpecs && matchSkills && matchDifficulty;
+    // 4. Фильтр по рейтингу ( rate )
+    // Вопрос проходит, если массив пуст ИЛИ его рейтинг есть среди выбранных кнопок
+    const matchRating = activeRatings.length === 0 || 
+      activeRatings.includes(question.rate);
+
+    // Вопрос проходит, если удовлетворяет ВСЕМ четырем условиям
+    return matchSpecs && matchSkills && matchDifficulty && matchRating;
   });
 
   // console.log('1. Родоначальник uniqueSpecs:', uniqueSpecs);
@@ -91,6 +97,9 @@ function Main() {
 
           activeDifficulties={activeDifficulties}
           setActiveDifficulties={setActiveDifficulties}
+
+          activeRatings={activeRatings}
+          setActiveRatings={setActiveRatings}
         />
       </section>
     </main>
