@@ -1,36 +1,50 @@
 import styles from './Pagination.module.css'
 
 function Pagination({ currentPage, totalPages, setCurrentPage = () => {} }) {
-  // АЛГОРИТМ СКОЛЬЗЯЩЕГО ОКНА С ТРОЕТОЧИЯМИ
+  // АЛГОРИТМ: ДВА ТРОЕТОЧИЯ С ИСХОДНОЙ ПЕРВОЙ И ПОСЛЕДНИМИ СТРАНИЦАМИ
   const getPageRange = () => {
     const range = [];
-    const delta = 2; // Сколько страниц показывать слева и справа от текущей
 
-    // Всегда добавляем первую страницу
+    // 1. Первая страница ВСЕГДА должна быть на экране
     range.push(1);
 
-    // Вычисляем границы "окна" вокруг текущей страницы
-    const leftBound = Math.max(2, currentPage - delta);
-    const rightBound = Math.min(totalPages - 1, currentPage + delta);
+    // Вычисляем границы центрального "окна" вокруг текущей страницы
+    // Показываем текущую страницу и по одной соседней с каждой стороны (например, для 5 это будет 4, 5, 6)
+    let leftBound = Math.max(2, currentPage - 1);
+    let rightBound = Math.min(totalPages - 1, currentPage + 1);
 
-    // Если между 1 и левой границей есть пропуск, ставим троеточие
+    // Дополнительная корректировка краев, чтобы в центре всегда было строго 3 цифры
+    if (currentPage <= 3) {
+      leftBound = 2;
+      rightBound = Math.min(totalPages - 1, 4);
+    }
+    if (currentPage >= totalPages - 2) {
+      leftBound = Math.max(2, totalPages - 3);
+      rightBound = totalPages - 1;
+    }
+
+    // 2. Ставим ПЕРВОЕ троеточие, если между '1' и началом центрального окна есть разрыв
     if (leftBound > 2) {
       range.push('...');
     }
 
-    // Заполняем центральное скользящее окно
+    // 3. Заполняем центральное скользящее окно (обычно 3 цифры)
     for (let i = leftBound; i <= rightBound; i++) {
       range.push(i);
     }
 
-    // Если между правой границей и последней страницей есть пропуск, ставим троеточие
-    if (rightBound < totalPages - 1) {
+    // 4. Ставим ВТОРОЕ троеточие, если между концом центрального окна и тремя последними страницами есть разрыв
+    // Так как в конце у нас зафиксированы три страницы (например, 171, 172, 173), разрыв проверяем до (totalPages - 2)
+    if (rightBound < totalPages - 3) {
       range.push('...');
     }
 
-    // Всегда добавляем последнюю страницу (если страниц больше, чем 1)
-    if (totalPages > 1) {
-      range.push(totalPages);
+    // 5. Добавляем фиксированные последние 3 страницы (если они еще не вывелись в цикле)
+    if (totalPages > 3) {
+      const lastStart = Math.max(rightBound + 1, totalPages - 2);
+      for (let i = lastStart; i <= totalPages; i++) {
+        range.push(i);
+      }
     }
 
     return range;
