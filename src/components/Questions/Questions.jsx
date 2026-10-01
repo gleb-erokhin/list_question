@@ -2,7 +2,7 @@ import Pagination from '../Pagination/Pagination'
 import Spoiler from '../Spoiler/Spoiler'
 import styles from './Questions.module.css'
 
-function Questions({ items }) {
+function Questions({ items, currentPage, totalPages, setCurrentPage }) {
 
   return (
     <>
@@ -22,7 +22,11 @@ function Questions({ items }) {
             })
           }
         </div>
-        <Pagination />
+        <Pagination 
+          currentPage={currentPage}
+          totalPages={totalPages}
+          setCurrentPage={setCurrentPage}
+        />
       </div>
     </>
   )

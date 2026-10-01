@@ -7,22 +7,44 @@ import styles from './Main.module.css'
 
 function Main() {
   const [questions, setQuestions] = useState([]);
-  // Стейт фильтра: { type: 'specialization' | 'skill', id: number } или null
+
+    // Метаданные пагинации с сервера
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
  // МАССИВ: хранит ID только активных специализаций, например: [1, 2]
   const [activeSpecializations, setActiveSpecializations] = useState([]);  
   const [activeSkills, setActiveSkills] = useState([]); 
   const [activeDifficulties, setActiveDifficulties] = useState([]); // Новый стейт для сложности
   const [activeRatings, setActiveRatings] = useState([]);
 
+  // Добавляем [currentPage] в массив зависимостей
   useEffect(() => {
     // Делаем один запрос по твоему принципу склеивания строк
-    axios.get(API_BASE + 'questions/public-questions')
+    axios.get(`${API_BASE}questions/public-questions?page=${currentPage}`)
       .then(response => {
         console.log('public-questions', response.data.data)
+        // 1. Сохраняем вопросы текущей страницы
         setQuestions(response.data.data || []);
+
+        // 2. Вычисляем общее количество страниц на основе данных сервера
+        const totalItems = response.data.total || 0;
+        const limitPerPage = response.data.limit || 10;
+        const calculatedPages = Math.ceil(totalItems / limitPerPage);
+
+        // ОТЛАДКА: Посмотрим, сколько элементов и страниц насчитал код
+        console.log('Пагинация с сервера:', { totalItems, limitPerPage, calculatedPages });
+        
+        setTotalPages(calculatedPages || 1);
       })
       .catch(error => console.error('Ошибка при запросе:', error));
-  }, []);
+  }, [currentPage]); // Запрос будет уходить каждый раз, когда мы меняем страницу!
+
+  // Функция для сброса страницы на 1-ю при клике на любые фильтры параметров
+  const handleSetFilter = (setter, value) => {
+    setter(value);
+    setCurrentPage(1); 
+  };
 
   // 1. Собираем уникальные Специализации для компонента Qualifications
   const uniqueSpecs = [];
@@ -83,23 +105,24 @@ function Main() {
   return (
     <main className={styles.main}>
       <section className={styles.main__wrapper}>
-        {/* 4. Отдаем списку вопросов уже отфильтрованный массив */}
-        <Qestions items={filteredQuestions} />
+        {/* 4. Отдаем списку вопросов уже отфильтрованный массив, данные серверной пагинации */}
+        <Qestions 
+          items={filteredQuestions} 
+          currentPage={currentPage}
+          totalPages={totalPages}
+          setCurrentPage={setCurrentPage}
+        />
         {/* 5. Передаем списки и управление фильтром в блок параметров */}
         <Parameters 
           specializations={uniqueSpecs}
-          activeSpecializations={activeSpecializations}
-          setActiveSpecializations={setActiveSpecializations}
-
           skills={uniqueSkills}
-          activeSkills={activeSkills}
-          setActiveSkills={setActiveSkills}
+          activeSpecializations={activeSpecializations}
 
-          activeDifficulties={activeDifficulties}
-          setActiveDifficulties={setActiveDifficulties}
-
-          activeRatings={activeRatings}
-          setActiveRatings={setActiveRatings}
+          activeSkills={activeSkills} 
+          setActiveSkills={(val) => handleSetFilter(setActiveSkills, val)}
+          setActiveSpecializations={(val) => handleSetFilter(setActiveSpecializations, val)}
+          activeDifficulties={(val) => handleSetFilter(setActiveDifficulties, val)}
+          activeRatings={(val) => handleSetFilter(setActiveRatings, val)}
         />
       </section>
     </main>

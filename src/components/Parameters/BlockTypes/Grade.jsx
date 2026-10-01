@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './../../Parameters/Parameters.module.css'
 
-const Grade = ({ title, items = [], activeSkills, setActiveSkills }) => {
+const Grade = ({ title, items = [], activeSkills = [], setActiveSkills }) => {
   // const [tags, setTags] = useState([]);
   const [isExpanded, setIsExpanded] = useState(false);
 

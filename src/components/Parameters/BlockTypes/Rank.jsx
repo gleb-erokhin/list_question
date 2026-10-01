@@ -7,13 +7,18 @@ function Rank({ title, arrays = [], activeItems = [], setActiveItems }) {
     // чтобы код не падал, просто выходим из функции
     if (!setActiveItems) return;
 
-    setActiveItems((prevSelected) => {
-      if (prevSelected.includes(value)) {
-        return prevSelected.filter(item => item !== value);
-      } else {
-        return [...prevSelected, value];
-      }
-    });
+    // Безопасно проверяем тип данных
+    if (Array.isArray(activeItems)) {
+      setActiveItems((prevSelected) => {
+        if (prevSelected.includes(value)) {
+          return prevSelected.filter(item => item !== value);
+        } else {
+          return [...prevSelected, value];
+        }
+      });
+    } else {
+      setActiveItems(value);
+    }
   };
 
   return (
@@ -21,8 +26,10 @@ function Rank({ title, arrays = [], activeItems = [], setActiveItems }) {
       <h3 className={styles.parameters__title}>{title}</h3>
       <ul className={styles.tags}> 
         {arrays.map((value, index) => {
-          // Проверяем, выбрана ли данная кнопка (строка или число)
-          const isSelected = activeItems.includes(value);
+          // Безопасное вычисление активности кнопки
+          const isSelected = Array.isArray(activeItems) 
+            ? activeItems.includes(value) 
+            : activeItems === value;
 
           return (
             <li key={index}>
