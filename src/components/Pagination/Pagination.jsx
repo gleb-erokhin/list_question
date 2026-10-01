@@ -1,11 +1,42 @@
 import styles from './Pagination.module.css'
 
-function Pagination({ currentPage, totalPages, setCurrentPage }) {
-    // Динамически строим массив страниц на основе ответа сервера (например, [1, 2, 3])
-  const pageNumbers = [];
-  for (let i = 1; i <= totalPages; i++) {
-    pageNumbers.push(i);
-  }
+function Pagination({ currentPage, totalPages, setCurrentPage = () => {} }) {
+  // АЛГОРИТМ СКОЛЬЗЯЩЕГО ОКНА С ТРОЕТОЧИЯМИ
+  const getPageRange = () => {
+    const range = [];
+    const delta = 2; // Сколько страниц показывать слева и справа от текущей
+
+    // Всегда добавляем первую страницу
+    range.push(1);
+
+    // Вычисляем границы "окна" вокруг текущей страницы
+    const leftBound = Math.max(2, currentPage - delta);
+    const rightBound = Math.min(totalPages - 1, currentPage + delta);
+
+    // Если между 1 и левой границей есть пропуск, ставим троеточие
+    if (leftBound > 2) {
+      range.push('...');
+    }
+
+    // Заполняем центральное скользящее окно
+    for (let i = leftBound; i <= rightBound; i++) {
+      range.push(i);
+    }
+
+    // Если между правой границей и последней страницей есть пропуск, ставим троеточие
+    if (rightBound < totalPages - 1) {
+      range.push('...');
+    }
+
+    // Всегда добавляем последнюю страницу (если страниц больше, чем 1)
+    if (totalPages > 1) {
+      range.push(totalPages);
+    }
+
+    return range;
+  };
+
+  const pages = getPageRange();
 
   return (
     <>
@@ -19,17 +50,26 @@ function Pagination({ currentPage, totalPages, setCurrentPage }) {
           </svg>
         </button>
         
-        {/* Номера страниц */}
-        {pageNumbers.map(number => (
-          <li key={number}>
+        {/* Выводим цифры и троеточия напрямую */}
+        {pages.map((page, index) => {
+          if (page === '...') {
+            return (
+              <span key={`dots-${index}`} className={styles.dots}>
+                ...
+              </span>
+            );
+          }
+
+          return (
             <button
-              onClick={() => setCurrentPage(number)}
-              className={`${styles.page__link} ${currentPage === number ? styles.page__current : ''}`}
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={`${styles.page__link} ${currentPage === page ? styles.page__current : ''}`}
             >
-              {number}
+              {page}
             </button>
-          </li>
-        ))}
+          );
+        })}
 
         <button className={styles.btn__right}
           onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
