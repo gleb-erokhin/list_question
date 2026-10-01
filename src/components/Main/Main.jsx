@@ -40,12 +40,6 @@ function Main() {
       .catch(error => console.error('Ошибка при запросе:', error));
   }, [currentPage]); // Запрос будет уходить каждый раз, когда мы меняем страницу!
 
-  // Функция для сброса страницы на 1-ю при клике на любые фильтры параметров
-  const handleSetFilter = (setter, value) => {
-    setter(value);
-    setCurrentPage(1); 
-  };
-
   // 1. Собираем уникальные Специализации для компонента Qualifications
   const uniqueSpecs = [];
   const specMap = new Map();
@@ -116,13 +110,33 @@ function Main() {
         <Parameters 
           specializations={uniqueSpecs}
           skills={uniqueSkills}
+          // 1. Специализации
           activeSpecializations={activeSpecializations}
-
-          activeSkills={activeSkills} 
-          setActiveSkills={(val) => handleSetFilter(setActiveSkills, val)}
-          setActiveSpecializations={(val) => handleSetFilter(setActiveSpecializations, val)}
-          activeDifficulties={(val) => handleSetFilter(setActiveDifficulties, val)}
-          activeRatings={(val) => handleSetFilter(setActiveRatings, val)}
+          setActiveSpecializations={(val) => {
+            setActiveSpecializations(val);
+            setCurrentPage(1); // сбрасываем страницу на 1-ю
+          }}
+          
+          // 2. Навыки
+          activeSkills={activeSkills}
+          setActiveSkills={(val) => {
+            setActiveSkills(val);
+            setCurrentPage(1);
+          }}
+          
+          // 3. Уровень сложности
+          activeDifficulties={activeDifficulties}
+          setActiveDifficulties={(val) => {
+            setActiveDifficulties(val);
+            setCurrentPage(1);
+          }}
+          
+          // 4. Рейтинг (ВОТ ТУТ ПРАВИМ!)
+          activeRatings={activeRatings}
+          setActiveRatings={(val) => {
+            setActiveRatings(val);
+            setCurrentPage(1);
+          }}
         />
       </section>
     </main>
