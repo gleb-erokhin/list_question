@@ -1,0 +1,44 @@
+/* Общий контейнер, который теперь внешне выглядит как инпут */
+.searchContainer {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e8e8e8;
+  border-radius: 68px;
+  width: 344px;
+  height: 48px;
+  background-color: #fff; /* Чтобы за кнопкой и инпутом не просвечивал фон страницы */
+  padding-left: 16px;     /* Внутренний отступ слева для кнопки */
+  box-sizing: border-box; /* Гарантирует точные размеры 344x48 */
+}
+
+/* Кнопка с лупой */
+.searchButton {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0; /* Запрещаем кнопке сжиматься */
+}
+
+/* Измененный инпут */
+.input {
+  border: none;          /* Убираем рамку, так как она теперь у контейнера */
+  background: transparent;/* Убираем собственный фон инпута */
+  height: 100%;
+  width: 100%;
+  /* Корректируем паддинги: слева отступ поменьше, так как там стоит кнопка */
+  padding: 12px 24px 12px 10px; 
+  outline: none;         /* Убираем дефолтную обводку браузера при фокусе */
+}
+
+/* Стили для плейсхолдера с учетом CSS-модулей (добавлен селектор класса) */
+.input::placeholder {
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 130%;
+  color: #a3a3a3;
+}
