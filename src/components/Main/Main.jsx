@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { API_BASE } from '../../apiCondig';
 import Parameters from '../Parameters/Parameters'
@@ -18,8 +18,11 @@ function Main() {
   const [activeDifficulties, setActiveDifficulties] = useState([]); // Новый стейт для сложности
   const [activeRatings, setActiveRatings] = useState([]);
 
-  // ПОИСК: Стейт для строки поиска
+  // ПОИСК: Стейт для строки поиска, добавляем debounce для задержки отправки запроса на сервер
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState(''); // Для отправки на сервер с задержкой
+  // Хранилище для таймера, чтобы очищать его при быстром наборе текста
+  const debounceTimerRef = useRef(null);
 
   // Функция для очистки кавычек и декодирования HTML-тегов
   const decodeHtmlString = (htmlStr) => {
@@ -38,11 +41,25 @@ function Main() {
     return cleanStr;
   };
 
-  // Добавляем [currentPage] в массив зависимостей
+  // 1. ЭФФЕКТ ДЛЯ ДЕБАУНСА (Следит за быстрым вводом букв)
+  useEffect(() => {
+    // Если пользователь нажал клавишу, а предыдущий таймер еще тикает — сбрасываем его
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+    // Запускаем новый таймер на 400 миллисекунд
+    debounceTimerRef.current = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 400);
+    // Функция очистки: сработает, если компонент размонтируется
+    return () => clearTimeout(debounceTimerRef.current);
+  }, [searchQuery]); // Перезапускается на каждую введенную букву
+
+  // 2. ЭФФЕКТ ДЛЯ ЗАПРОСОВ К СЕРВЕРУ (Следит за страницей и отложенным поиском), Добавляем [currentPage] в массив зависимостей для работы пагинации
   useEffect(() => {
     // Делаем один запрос по твоему принципу склеивания строк
     // Формируем URL. Дописываем параметр поиска (например, &title=Event)
-    axios.get(`${API_BASE}questions/public-questions?page=${currentPage}&title=${encodeURIComponent(searchQuery)}`)
+    axios.get(`${API_BASE}questions/public-questions?page=${currentPage}&title=${encodeURIComponent(debouncedSearchQuery)}`)
       .then(response => {
         console.log('public-questions', response.data.data)
         const rawData = response.data.data || [];
@@ -68,7 +85,7 @@ function Main() {
         setTotalPages(calculatedPages || 1);
       })
       .catch(error => console.error('Ошибка при запросе:', error));
-  }, [currentPage, searchQuery]); // Запрос будет уходить каждый раз, когда мы меняем страницу!
+  }, [currentPage, debouncedSearchQuery]); // Запрос уходит только при реальной паузе в наборе!
 
   // 1. Собираем уникальные Специализации для компонента Qualifications
   const uniqueSpecs = [];
