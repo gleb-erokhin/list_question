@@ -71,7 +71,6 @@
   line-height: 1.6;
   color: #333;
 }
-
 /* 2. Схлопываем лишние отступы у абзацев и списков, которые создают дыры */
 .answerContent p,
 .answerContent ul,
@@ -79,54 +78,59 @@
   margin-top: 0;
   margin-bottom: 12px; /* Уменьшаем отступ снизу, чтобы текст шел плотно */
 }
-
 /* 3. Защита от пустых невидимых тегов, которые бэкенд может присылать случайно */
 .answerContent p:empty {
   display: none;
 }
-
 /* 4. Исправляем тег <pre> (блоки программного кода) */
 .answerContent pre {
-  margin: 12px 0;          /* Делаем аккуратные отступы сверху и снизу от кода */
-  padding: 12px 16px;      /* ВАЖНО: Внутренний отступ от краев самого блока с кодом */
+  margin: 12px 0; /* Делаем аккуратные отступы сверху и снизу от кода */
+  padding: 12px 16px; /* ВАЖНО: Внутренний отступ от краев самого блока с кодом */
   background-color: #f5f5f5; /* Легкий серый фон для кода, как на скриншотах */
-  border-radius: 4px;      /* Слегка скругляем углы */
-  overflow-x: auto;        /* Если код длинный, появится горизонтальная прокрутка, а не сломается верстка */
-  
+  border-radius: 4px; /* Слегка скругляем углы */
+  overflow-x: auto; /* Если код длинный, появится горизонтальная прокрутка, а не сломается верстка */
+
   /* Наследуем или задаем правильный шрифт для кода */
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-size: 14px;
 }
-
 /* 5. Если внутри pre используется тег <code>, сбрасываем его дефолтные padding */
 .answerContent pre code {
   padding: 0;
   background: none;
 }
-/* 1. Полностью скрываем и обнуляем тег canvas внутри контента, чтобы он не занимал место */
-.answerContent canvas {
+/* 6. Полностью скрываем и обнуляем тег canvas внутри контента, чтобы он не занимал место */
+.answerContent canvas,
+iframe {
   display: none !important;
+  visibility: hidden !important;
   width: 0 !important;
   height: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
 }
-
-/* 2. Стилизуем инлайновый (строчный) код (тег code, который идет прямо внутри текста) */
+/* 7. Стилизуем инлайновый (строчный) код (тег code, который идет прямо внутри текста) */
 .answerContent code {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   background-color: #f5f5f5; /* Легкий серый фон для выделения кода в тексте */
-  color: #c7254e;           /* Классический цвет для инлайн-кода (можно изменить на ваш) */
-  padding: 2px 6px;         /* Небольшие аккуратные отступы вокруг слова */
-  border-radius: 4px;       /* Легкое скругление углы */
-  font-size: 90%;           /* Делаем шрифт кода чуть меньше основного текста */
+  color: #c7254e; /* Классический цвет для инлайн-кода (можно изменить на ваш) */
+  padding: 2px 6px; /* Небольшие аккуратные отступы вокруг слова */
+  border-radius: 4px; /* Легкое скругление углы */
+  font-size: 90%; /* Делаем шрифт кода чуть меньше основного текста */
+  word-break: break-word;
+  white-space: normal;
 }
-
-/* 3. Отменяем специфические стили инлайн-кода, если этот тег code находится внутри большого блока pre */
+/* 8. Отменяем специфические стили инлайн-кода, если этот тег code находится внутри большого блока pre */
 .answerContent pre code {
   background-color: transparent;
   color: inherit;
   padding: 0;
   border-radius: 0;
   font-size: inherit;
+}
+/* 9. Дополнительная защита: если iframe находится глубоко внутри тегов code или pre */
+.answerContent code iframe,
+.answerContent pre iframe,
+.answerContent code video {
+  display: none !important;
 }
