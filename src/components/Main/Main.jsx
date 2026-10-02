@@ -18,14 +18,40 @@ function Main() {
   const [activeDifficulties, setActiveDifficulties] = useState([]); // Новый стейт для сложности
   const [activeRatings, setActiveRatings] = useState([]);
 
+  // Функция для очистки кавычек и декодирования HTML-тегов
+  const decodeHtmlString = (htmlStr) => {
+    if (typeof htmlStr !== 'string') return '';
+
+    // 1. Убираем кавычки (двойные или одинарные) на краях строки, если они есть
+    let cleanStr = htmlStr.replace(/^["']|["']$/g, '');
+
+    // 2. Создаем виртуальный элемент в памяти браузера для парсинга спецсимволов (&lt; -> <)
+    if (typeof window !== 'undefined') {
+      const txt = document.createElement('textarea');
+      txt.innerHTML = cleanStr;
+      cleanStr = txt.value;
+    }
+
+    return cleanStr;
+  };
+
   // Добавляем [currentPage] в массив зависимостей
   useEffect(() => {
     // Делаем один запрос по твоему принципу склеивания строк
     axios.get(`${API_BASE}questions/public-questions?page=${currentPage}`)
       .then(response => {
         console.log('public-questions', response.data.data)
+        const rawData = response.data.data || [];
+      
+        // Пробегаем по массиву и очищаем текстовые свойства каждого вопроса
+        const sanitizedData = rawData.map(item => ({
+          ...item,
+          shortAnswer: decodeHtmlString(item.shortAnswer),
+          longAnswer: decodeHtmlString(item.longAnswer)
+        }));
+        
         // 1. Сохраняем вопросы текущей страницы
-        setQuestions(response.data.data || []);
+        setQuestions(sanitizedData);
 
         // 2. Вычисляем общее количество страниц на основе данных сервера
         const totalItems = response.data.total || 0;
@@ -131,7 +157,7 @@ function Main() {
             setCurrentPage(1);
           }}
           
-          // 4. Рейтинг (ВОТ ТУТ ПРАВИМ!)
+          // 4. Рейтинг
           activeRatings={activeRatings}
           setActiveRatings={(val) => {
             setActiveRatings(val);

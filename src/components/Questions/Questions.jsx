@@ -12,10 +12,18 @@ function Questions({ items, currentPage, totalPages, setCurrentPage }) {
           {
             items.map((item) => {
               return (
-                <Spoiler key={item.id} title={item.title} spoilerImg={item.imageSrc} reating={item.rate} difficult={item.complexity}>
-                  <p>
-                    {item.shortAnswer} <br />
-                  </p>
+                <Spoiler 
+                  key={item.id} 
+                  title={item.title} 
+                  spoilerImg={item.imageSrc} 
+                  reating={item.rate} 
+                  difficult={item.complexity}
+                >
+                  {/* ВАЖНО: Выводим обработанный HTML через специальный атрибут React */}
+                  <div 
+                    className={styles.answerContent}
+                    dangerouslySetInnerHTML={{ __html: item.shortAnswer }} 
+                  />
                   {/* <a className={styles.spoiler__more} htef="" >Подробнее</a> */}
                 </Spoiler>
               )
