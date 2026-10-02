@@ -1,6 +1,6 @@
 import styles from './Search.module.css'
 
-function Search() {
+function Search({ value, onChange}) {
   return (
     <div className={styles.searchContainer}>
       <button type="button" className={styles.searchButton} aria-label="Поиск">
@@ -14,7 +14,9 @@ function Search() {
       <input 
         className={styles.input} 
         type='text' 
-        placeholder='Введите запрос' 
+        placeholder='Введите запрос'
+        value={value}
+        onChange={(e)=> onChange(e.target.value)} 
       />
     </div>
   )

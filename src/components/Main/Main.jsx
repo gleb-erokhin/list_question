@@ -8,15 +8,18 @@ import styles from './Main.module.css'
 function Main() {
   const [questions, setQuestions] = useState([]);
 
-    // Метаданные пагинации с сервера
+  // Метаданные пагинации с сервера
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
- // МАССИВ: хранит ID только активных специализаций, например: [1, 2]
+  // Стейты фильтров-кнопок, МАССИВ: хранит ID только активных специализаций, например: [1, 2]
   const [activeSpecializations, setActiveSpecializations] = useState([]);  
   const [activeSkills, setActiveSkills] = useState([]); 
   const [activeDifficulties, setActiveDifficulties] = useState([]); // Новый стейт для сложности
   const [activeRatings, setActiveRatings] = useState([]);
+
+  // ПОИСК: Стейт для строки поиска
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Функция для очистки кавычек и декодирования HTML-тегов
   const decodeHtmlString = (htmlStr) => {
@@ -38,7 +41,8 @@ function Main() {
   // Добавляем [currentPage] в массив зависимостей
   useEffect(() => {
     // Делаем один запрос по твоему принципу склеивания строк
-    axios.get(`${API_BASE}questions/public-questions?page=${currentPage}`)
+    // Формируем URL. Дописываем параметр поиска (например, &title=Event)
+    axios.get(`${API_BASE}questions/public-questions?page=${currentPage}&title=${encodeURIComponent(searchQuery)}`)
       .then(response => {
         console.log('public-questions', response.data.data)
         const rawData = response.data.data || [];
@@ -64,7 +68,7 @@ function Main() {
         setTotalPages(calculatedPages || 1);
       })
       .catch(error => console.error('Ошибка при запросе:', error));
-  }, [currentPage]); // Запрос будет уходить каждый раз, когда мы меняем страницу!
+  }, [currentPage, searchQuery]); // Запрос будет уходить каждый раз, когда мы меняем страницу!
 
   // 1. Собираем уникальные Специализации для компонента Qualifications
   const uniqueSpecs = [];
@@ -162,6 +166,12 @@ function Main() {
           setActiveRatings={(val) => {
             setActiveRatings(val);
             setCurrentPage(1);
+          }}
+          // 6. ПОИСК (Прописываем точно так же!)
+          searchQuery={searchQuery}
+          setSearchQuery={(val) => {
+          setSearchQuery(val);
+          setCurrentPage(1); // При вводе текста тоже перекидываем пользователя на 1-ю страницу результатов
           }}
         />
       </section>

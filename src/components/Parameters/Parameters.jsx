@@ -5,7 +5,7 @@ import styles from './Parameters.module.css'
 import Search from './Search'
 
 function Parameters({ specializations, skills, activeSpecializations, setActiveSpecializations, activeSkills,
-  setActiveSkills, activeDifficulties, setActiveDifficulties, activeRatings, setActiveRatings }) {
+  setActiveSkills, activeDifficulties, setActiveDifficulties, activeRatings, setActiveRatings, searchQuery,setSearchQuery }) {
     
   const difficult = ['1-3',' 4-6', '7-8', '9-10']
   const status = ['Изученные', 'Не изученные', 'Все']
@@ -14,7 +14,10 @@ function Parameters({ specializations, skills, activeSpecializations, setActiveS
 
   return (
     <div className={styles.parameters}>
-      <Search />
+      <Search
+        value={searchQuery}
+        onChange={setSearchQuery}
+      />
       {/* Передаем массив специализаций и стейты фильтра вниз */}
       <Qualifications 
         title='Специализация'
