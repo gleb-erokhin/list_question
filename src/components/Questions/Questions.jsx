@@ -1,12 +1,13 @@
 import Pagination from '../Pagination/Pagination'
 import Spoiler from '../Spoiler/Spoiler'
 import styles from './Questions.module.css'
+import mainStyles from './../Main/Main.module.css'
 
 function Questions({ items, currentPage, totalPages, setCurrentPage }) {
 
   return (
     <>
-      <div className={styles.questions}>
+      <div className={`${styles.questions} ${mainStyles.bcgColorWhite}`}>
         <h2 className={styles.questions__title}>Вопросы React, JavaScript</h2>
         <div className={styles.spoilers}>
           {

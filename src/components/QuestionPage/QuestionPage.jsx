@@ -1,6 +1,6 @@
 import styles from './QuestionPage.module.css'
 import mainStyles from './../Main/Main.module.css'
-import questionStyles from './../Questions/Questions.module.css';
+import imgExample from './../../assets/img/imgExample.png'
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -86,24 +86,54 @@ function QuestionPage() {
 // Внутри рендера QuestionPage.jsx
 return (
   <main className={mainStyles.main}>
+    <Link to="/" className={styles.questionPage__backBtn}>&larr; Назад</Link>
     <div className={mainStyles.main__wrapper} style={{ padding: '20px' }}>
       
       {/* ЛЕВЫЙ БЛОК: Подробное описание вопроса */}
-      <div className={styles.leftColumn}>
-        <Link to="/" className={styles.backBtn}>&larr; Вернуться к списку вопросов</Link>
-        
-        <article className={styles.questionArticle}>
-          <h1 className={styles.questionTitle}>{question.title}</h1>
-          
-          <div className={styles.contentSection}>
-            <h2>Полный разбор вопроса:</h2>
+      <article className={styles.questionPage__inner}>
+
+        <div className={`${styles.questionPage__header} ${styles.questionPage__pading24} ${mainStyles.bcgColorWhite}`}>
+          <img className={styles.questionPage__img} src={`${!question.imageSrc && imgExample}`} alt="image from question" />
+          <div className={styles.questionPage__desc}>
+            <h1>{question.title}</h1> 
+            <p className={styles.questionPage__about}>{question.description}</p> 
+          </div>
+        </div>
+        {/* Блок перехода по вопросам */}
+        <div className={`${styles.questionPage__slider} ${mainStyles.bcgColorWhite}`}>
+          <div className={styles.questionPage__sliderContainer}>
+            <button className={styles.questionPage__prevBtn}>
+              {/* <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M7.23809 0.180571C7.55259 0.450138 7.58901 0.923613 7.31944 1.23811L1.73781 7.75001L7.31944 14.2619C7.58901 14.5764 7.55259 15.0499 7.23809 15.3195C6.9236 15.589 6.45012 15.5526 6.18056 15.2381L0.180558 8.23811C-0.0601858 7.95724 -0.0601858 7.54279 0.180558 7.26192L6.18056 0.26192C6.45012 -0.0525743 6.9236 -0.0889955 7.23809 0.180571Z" fill="#5E5E5E" />
+              </svg> */}
+              Предыдущий
+            </button >
+            <button className={styles.questionPage__nextBtn}>
+              Следующий
+              {/* <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M0.26192 0.180571C0.576414 -0.0889955 1.04989 -0.0525743 1.31946 0.26192L7.31946 7.26192C7.5602 7.54279 7.5602 7.95724 7.31946 8.23811L1.31946 15.2381C1.04989 15.5526 0.576414 15.589 0.26192 15.3195C-0.0525743 15.0499 -0.0889955 14.5764 0.180571 14.2619L5.76221 7.75001L0.180571 1.23811C-0.0889955 0.923613 -0.0525743 0.450138 0.26192 0.180571Z" fill="#5E5E5E" />
+              </svg> */}
+            </button>
+          </div>
+        </div>
+        {/* Блок с коротким ответом */}
+        <div className={`${styles.questionPage__answers} ${styles.questionPage__pading24} ${mainStyles.bcgColorWhite}`}>
+            <h2>Краткий ответ</h2>
             <div 
-              className={questionStyles.answerContent} 
+              className={styles.questionPage__answersText} 
+              dangerouslySetInnerHTML={{ __html: question.shortAnswer }} 
+            />
+        </div>
+        {/* Блок с ответами */}
+        <div className={`${styles.questionPage__answers} ${styles.questionPage__pading24} ${mainStyles.bcgColorWhite}`}>
+            <h2>Развернутый ответ</h2>
+            <div 
+              className={styles.questionPage__answersText} 
               dangerouslySetInnerHTML={{ __html: question.longAnswer }} 
             />
-          </div>
-        </article>
-      </div>
+        </div>
+
+      </article>
 
       {/* ПРАВЫЙ БЛОК: Параметры конкретного вопроса */}
       <Parameters 
