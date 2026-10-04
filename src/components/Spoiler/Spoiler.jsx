@@ -1,8 +1,9 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom';
 import styles from './Spoiler.module.css'
 
 
-function Spoiler({title, children, spoilerImg, reating, difficult}) {
+function Spoiler({ id, title, children, spoilerImg, reating, difficult }) {
   // 2. Создаем состояние: по умолчанию спойлер закрыт (false)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -48,6 +49,12 @@ function Spoiler({title, children, spoilerImg, reating, difficult}) {
             : null}
             {spoilerImg ? <img className={styles.spoiler__img} src={spoilerImg} alt='img' /> : null}
             {children}
+            {/* Кнопка-ссылка для перехода внутрь, на страницу с полным описанием */}
+            <div style={{ marginTop: '15px', textAlign: 'right' }}>
+              <Link to={`questions/${id}`} className={styles.detailsLink}>
+                Подробнее
+              </Link>
+            </div>
           </div>
         </div>
       </div>

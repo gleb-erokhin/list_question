@@ -59,7 +59,7 @@ function Main() {
   useEffect(() => {
     // Делаем один запрос по твоему принципу склеивания строк
     // Формируем URL. Дописываем параметр поиска (например, &title=Event)
-    axios.get(`${API_BASE}questions/public-questions?page=${currentPage}&title=${encodeURIComponent(debouncedSearchQuery)}`)
+    axios.get(`${API_BASE}/questions/public-questions?page=${currentPage}&title=${encodeURIComponent(debouncedSearchQuery)}`)
       .then(response => {
         console.log('public-questions', response.data.data)
         const rawData = response.data.data || [];

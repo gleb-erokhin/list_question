@@ -14,7 +14,8 @@ function Questions({ items, currentPage, totalPages, setCurrentPage }) {
               return (
                 <Spoiler 
                   key={item.id} 
-                  title={item.title} 
+                  title={item.title}
+                  id={item.id} 
                   spoilerImg={item.imageSrc} 
                   reating={item.rate} 
                   difficult={item.complexity}

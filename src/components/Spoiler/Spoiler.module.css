@@ -124,3 +124,19 @@
 .spoiler__img {
   padding-bottom: 24px;
 }
+.detailsLink {
+  display: inline-block;
+  color: #6A0BFF; /* Фиолетовый цвет в тон вашей стрелочки */
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 6px 12px;
+  border: 1px solid #6A0BFF;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.detailsLink:hover {
+  background-color: #6A0BFF;
+  color: #fff;
+}
