@@ -72,7 +72,41 @@
 .questionPage__backBtn {
   margin-left: 20px;
 }
-.questionArticle {
+/* Для скрытия части текста */
+/* Контейнер краткого ответа на детальной странице */
+.shortAnswerContainer {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+  margin-bottom: 15px;
+  line-height: 1.6;
 }
-.contentSection {
+
+/* Состояние: свернуто */
+.isCollapsed {
+  -webkit-line-clamp: 4; /* Ограничение в 4 строки */
+  max-height: 6.4em;    /* line-height (1.6) * 4 строки */
+}
+
+/* Состояние: развернуто */
+.isExpanded {
+  -webkit-line-clamp: unset;
+  max-height: 1000px;   /* Запас высоты для раскрытия */
+}
+
+/* Кнопка управления внутри модуля */
+.btnToggle {
+  background: none;
+  border: none;
+  color: #0066cc; /* Ваш цвет ссылки/кнопки */
+  cursor: pointer;
+  font-weight: 500;
+  padding: 0;
+  margin-bottom: 20px;
+  text-decoration: underline;
+}
+
+.btnToggle:hover {
+  text-decoration: none;
 }

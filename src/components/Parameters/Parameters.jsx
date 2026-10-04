@@ -14,7 +14,7 @@ function Parameters({ specializations, skills, activeSpecializations, setActiveS
 
   return (
     <div className={`${styles.parameters} ${isDetailPage ? styles.parameters_question : ''}`}>
-      {/* 1. Поиск: показываем только если это НЕ страница деталки */}
+      {/* 1. Поиск: показываем только если это НЕ страница вопроса */}
       {
         !isDetailPage &&
         <Search
@@ -22,7 +22,7 @@ function Parameters({ specializations, skills, activeSpecializations, setActiveS
           onChange={setSearchQuery}
         />
       }
-      {/* Передаем массив специализаций и стейты фильтра вниз */}
+      {/* Передаем массив специализаций и стейты фильтра вниз если это не страница вопроса */}
       {
         !isDetailPage &&
         <Qualifications 
@@ -32,13 +32,14 @@ function Parameters({ specializations, skills, activeSpecializations, setActiveS
           setActiveSpecializations={setActiveSpecializations}
         />
       }
-      {/* Передаем массив навыков и стейты фильтра вниз */}
+      {/* Передаем массив навыков и стейты фильтра вниз, на страницу вопроса добавляется навык из конкретного вопроса передаваемый в АПИ QuestionPage */}
       <Grade 
         title='Навыки'
         items={skills}
         activeSkills={activeSkills}
         setActiveSkills={setActiveSkills}
       />
+      {/* Остальные компоненты ниже тоже скрываем для страницы вопроса */}
       {
         !isDetailPage &&
         <Rank 
