@@ -201,29 +201,42 @@ return (
             <h2>Краткий ответ</h2>
             <div 
               ref={textRef}
-              className={`${styles.shortAnswerContainer} ${styles.questionPage__answersText} ${isExpanded ? styles.isExpanded : styles.isCollapsed}`}
+              className={`
+                ${styles.shortAnswerContainer} 
+                ${isExpanded ? styles.isExpanded : styles.isCollapsed}
+                ${(!isExpanded && showButton) ? styles.hasOverlay : ''}
+                ${styles.questionPage__answersText} 
+                `}
               dangerouslySetInnerHTML={{ __html: question.shortAnswer }} 
             />
             {/* Кнопка управления отображением shortAnswer */}
             {showButton && (
-              <button onClick={toggleExpand} className={styles.btnToggle}>
-                {isExpanded ? 'Свернуть' : 'Развернуть'}
-              </button>)
-            }
+              <div className={styles.btnToggleContainer}>
+                <button onClick={toggleExpand} className={styles.btnToggle}>
+                  {isExpanded ? 'Свернуть' : 'Развернуть'}
+                </button>
+              </div>
+            )}
         </div>
         {/* Блок с ответами */}
         <div className={`${styles.questionPage__answers} ${styles.questionPage__pading24} ${mainStyles.bcgColorWhite} ${styles.longAnswerContainer}`}>
             <h2>Развернутый ответ</h2>
             <div 
               ref={longTextRef} // Передаем новый реф сюда
-              className={`${styles.longAnswerContainer} ${isLongExpanded ? styles.longIsExpanded : styles.longIsCollapsed} ${styles.questionPage__answersText}`}
+              className={`
+                ${styles.longAnswerContainer} 
+                ${isLongExpanded ? styles.longIsExpanded : styles.longIsCollapsed}
+                ${(!isLongExpanded && showLongButton) ? styles.hasLongOverlay : ''} 
+                ${styles.questionPage__answersText}`}
               dangerouslySetInnerHTML={{ __html: question.longAnswer }} 
             />
                 {/* Кнопка управления отображением для longAnswer */}
             {showLongButton && (
-              <button onClick={toggleLongExpand} className={styles.btnToggle}>
-                {isLongExpanded ? 'Свернуть' : 'Развернуть'}
-              </button>
+              <div className={styles.btnToggleContainer}>
+                <button onClick={toggleLongExpand} className={styles.btnToggle}>
+                  {isLongExpanded ? 'Свернуть' : 'Развернуть'}
+                </button>
+              </div>
             )}
         </div>
 
