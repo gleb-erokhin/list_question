@@ -1,10 +1,12 @@
 import styles from './QuestionPage.module.css'
+import mainStyles from './../Main/Main.module.css'
 import questionStyles from './../Questions/Questions.module.css';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE } from '../../apiCondig';
 import { Link } from 'react-router-dom';
+import Parameters from '../Parameters/Parameters';
 
 function QuestionPage() {
     // 2. Достаем ID вопроса из адресной строки (например, если URL /questions/2, то id = 2)
@@ -55,32 +57,85 @@ function QuestionPage() {
   // Если вопрос не пришел с сервера
   if (!question) return <div className={styles.centered}>Вопрос не найден.</div>;
 
-  // 7. ОСНОВНОЙ РЕНДЕР. Сюда код доходит, только когда question ЗАПОЛНИЛСЯ данными из API
+   // ДИНАМИЧЕСКИЙ СБОР ПАРАМЕТРОВ СТРОГО ДЛЯ ЭТОГО ВОПРОСА
+  // Передаем в сборщик массив из одного вопроса, и код сам вытащит нужные ID и Title
+  const singleQuestionArray = [question];
+
+  const uniqueSpecs = [];
+  const specMap = new Map();
+  singleQuestionArray.forEach(q => {
+    q.questionSpecializations?.forEach(spec => {
+      if (!specMap.has(spec.id)) {
+        specMap.set(spec.id, true);
+        uniqueSpecs.push({ id: spec.id, title: spec.title });
+      }
+    });
+  });
+
+  const uniqueSkills = [];
+  const skillMap = new Map();
+  singleQuestionArray.forEach(q => {
+    q.questionSkills?.forEach(skill => {
+      if (!skillMap.has(skill.id)) {
+        skillMap.set(skill.id, true);
+        uniqueSkills.push({ id: skill.id, title: skill.title });
+      }
+    });
+  });
 
 // Внутри рендера QuestionPage.jsx
 return (
-  <div className={styles.pageWrapper}>
-    <Link to="/" className={styles.backBtn}>&larr; Вернуться к списку вопросов</Link>
-    
-    <article className={styles.questionArticle}>
-      <h1 className={styles.questionTitle}>{question.title}</h1>
+  <main className={mainStyles.main}>
+    <div className={mainStyles.main__wrapper} style={{ padding: '20px' }}>
       
-      <div className={styles.metaInfo}>
-        <span>Сложность: {question.complexity}/10</span>
-        <span>Рейтинг: {question.rate}/5</span>
+      {/* ЛЕВЫЙ БЛОК: Подробное описание вопроса */}
+      <div className={styles.leftColumn}>
+        <Link to="/" className={styles.backBtn}>&larr; Вернуться к списку вопросов</Link>
+        
+        <article className={styles.questionArticle}>
+          <h1 className={styles.questionTitle}>{question.title}</h1>
+          
+          <div className={styles.contentSection}>
+            <h2>Полный разбор вопроса:</h2>
+            <div 
+              className={questionStyles.answerContent} 
+              dangerouslySetInnerHTML={{ __html: question.longAnswer }} 
+            />
+          </div>
+        </article>
       </div>
 
-      <div className={styles.contentSection}>
-        {/* Здесь выводится именно ПОЛНОЕ ОПИСАНИЕ (longAnswer) с сервера */}
-        <h2>Полный разбор вопроса:</h2>
-        <div 
-          className={questionStyles.answerContent} // Применяем наши готовые CSS-фиксы (canvas, pre, iframe)
-          dangerouslySetInnerHTML={{ __html: question.longAnswer }} 
-        />
-      </div>
-    </article>
-  </div>
-);
+      {/* ПРАВЫЙ БЛОК: Параметры конкретного вопроса */}
+      <Parameters 
+        // флаг, который сообщит компоненту, что это страница QuestionPage и необходимо отображать только ограниченные компоненты
+        isDetailPage={true} 
+
+        specializations={uniqueSpecs}
+        skills={uniqueSkills}
+        
+        // Передаем пустые заглушки для стейтов, так как кликать и фильтровать здесь ничего не нужно
+        activeSpecializations={[]}
+        setActiveSpecializations={() => {}}
+        activeSkills={[]}
+        setActiveSkills={() => {}}
+        
+        // Для сложности, рейтинга и статуса передаем данные текущего вопроса напрямую
+        activeDifficulties={[`${question.complexity}-${question.complexity}`]} // Подсветит нужный диапазон
+        setActiveDifficulties={() => {}}
+        
+        activeRatings={[question.rate]} // Подсветит нужную цифру рейтинга
+        setActiveRatings={() => {}}
+        
+        activeStatus={question.isLearned ? 'Изученные' : 'Не изученные'} // Подсветит статус вопроса
+        setActiveStatus={() => {}}
+
+        searchQuery=""
+        setSearchQuery={() => {}}
+      />
+
+    </div>
+  </main>
+  );
 
 }
 

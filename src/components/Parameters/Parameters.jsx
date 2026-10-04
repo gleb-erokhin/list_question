@@ -5,7 +5,7 @@ import styles from './Parameters.module.css'
 import Search from './Search'
 
 function Parameters({ specializations, skills, activeSpecializations, setActiveSpecializations, activeSkills,
-  setActiveSkills, activeDifficulties, setActiveDifficulties, activeRatings, setActiveRatings, searchQuery,setSearchQuery }) {
+  setActiveSkills, activeDifficulties, setActiveDifficulties, activeRatings, setActiveRatings, searchQuery,setSearchQuery, isDetailPage=false }) {
     
   const difficult = ['1-3',' 4-6', '7-8', '9-10']
   const status = ['Изученные', 'Не изученные', 'Все']
@@ -14,17 +14,24 @@ function Parameters({ specializations, skills, activeSpecializations, setActiveS
 
   return (
     <div className={styles.parameters}>
-      <Search
-        value={searchQuery}
-        onChange={setSearchQuery}
-      />
+      {/* 1. Поиск: показываем только если это НЕ страница деталки */}
+      {
+        !isDetailPage &&
+        <Search
+          value={searchQuery}
+          onChange={setSearchQuery}
+        />
+      }
       {/* Передаем массив специализаций и стейты фильтра вниз */}
-      <Qualifications 
-        title='Специализация'
-        items={specializations}
-        activeSpecializations={activeSpecializations}
-        setActiveSpecializations={setActiveSpecializations}
-      />
+      {
+        !isDetailPage &&
+        <Qualifications 
+          title='Специализация'
+          items={specializations}
+          activeSpecializations={activeSpecializations}
+          setActiveSpecializations={setActiveSpecializations}
+        />
+      }
       {/* Передаем массив навыков и стейты фильтра вниз */}
       <Grade 
         title='Навыки'
@@ -32,19 +39,28 @@ function Parameters({ specializations, skills, activeSpecializations, setActiveS
         activeSkills={activeSkills}
         setActiveSkills={setActiveSkills}
       />
-      <Rank 
-        arrays={difficult} 
-        title='Уровень сложности' 
-        activeItems={activeDifficulties}
-        setActiveItems={setActiveDifficulties}
-      />
-      <Rank 
-        arrays={[1, 2, 3, 4, 5]} 
-        title='Рейтинг' 
-        activeItems={activeRatings}
-        setActiveItems={setActiveRatings}
-      />
-      <Rank arrays={status} title='Статус' />
+      {
+        !isDetailPage &&
+        <Rank 
+          arrays={difficult} 
+          title='Уровень сложности' 
+          activeItems={activeDifficulties}
+          setActiveItems={setActiveDifficulties}
+        />
+      }
+      {
+        !isDetailPage &&
+        <Rank 
+          arrays={[1, 2, 3, 4, 5]} 
+          title='Рейтинг' 
+          activeItems={activeRatings}
+          setActiveItems={setActiveRatings}
+        />
+      }
+      {
+        !isDetailPage &&
+        <Rank arrays={status} title='Статус' />
+      }
     </div>
   )
 }
