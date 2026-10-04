@@ -50,7 +50,10 @@
   flex-direction: row;
   padding: 15px 0 15px 0;
 }
-.questionPage__nextBtn {
+.questionPage__nextBtn:disabled,
+.questionPage__prevBtn:disabled {
+  color: #a0a0a0 !important; /* Делаем текст блеклым */
+  cursor: not-allowed !important; /* Курсор запрета (перечеркнутый круг) */
 }
 .questionPage__answers {
   font-family: var(--font-family);

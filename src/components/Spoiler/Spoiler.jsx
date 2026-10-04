@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styles from './Spoiler.module.css'
 
 
-function Spoiler({ id, title, children, spoilerImg, reating, difficult }) {
+function Spoiler({ id, title, children, spoilerImg, reating, difficult, allIdsOnPage }) {
   // 2. Создаем состояние: по умолчанию спойлер закрыт (false)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -51,7 +51,11 @@ function Spoiler({ id, title, children, spoilerImg, reating, difficult }) {
             {children}
             {/* Кнопка-ссылка для перехода внутрь, на страницу с полным описанием */}
             <div style={{ marginTop: '15px', textAlign: 'right' }}>
-              <Link to={`questions/${id}`} className={styles.detailsLink}>
+              <Link 
+                to={`questions/${id}`} 
+                state={{ allIdsOnPage }} // Перевозим данные о соседях
+                className={styles.detailsLink}
+              >
                 Подробнее
               </Link>
             </div>

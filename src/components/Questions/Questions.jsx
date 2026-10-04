@@ -4,6 +4,8 @@ import styles from './Questions.module.css'
 import mainStyles from './../Main/Main.module.css'
 
 function Questions({ items, currentPage, totalPages, setCurrentPage }) {
+   // Собираем плоский массив всех ID текущей страницы, например: [12, 15, 88, 104...]
+  const allIdsOnPage = items.map(item => item.id);
 
   return (
     <>
@@ -12,6 +14,7 @@ function Questions({ items, currentPage, totalPages, setCurrentPage }) {
         <div className={styles.spoilers}>
           {
             items.map((item) => {
+
               return (
                 <Spoiler 
                   key={item.id} 
@@ -20,6 +23,8 @@ function Questions({ items, currentPage, totalPages, setCurrentPage }) {
                   spoilerImg={item.imageSrc} 
                   reating={item.rate} 
                   difficult={item.complexity}
+                  // Передаем весь массив ID текущей страницы пропсом
+                  allIdsOnPage={allIdsOnPage}
                 >
                   {/* ВАЖНО: Выводим обработанный HTML через специальный атрибут React */}
                   <div 
