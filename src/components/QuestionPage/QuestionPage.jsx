@@ -1,11 +1,12 @@
-import styles from './QuestionPage.module.css'
 import mainStyles from './../Main/Main.module.css'
 import imgExample from './../../assets/img/imgExample.png'
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE } from '../../apiCondig';
 import Parameters from '../Parameters/Parameters';
+import QuestionAnswerBlock from './QuestionAnswerBlock';
+import styles from './QuestionPage.module.css'
 
 function QuestionPage() {
   // 1. Извлекаем параметры окружения и навигации? Достаем ID вопроса из адресной строки (например, если URL /questions/2, то id = 2)
@@ -17,16 +18,6 @@ function QuestionPage() {
   
   // Достаем массив ID с главной страницы (если прилетел напрямую, иначе пустой массив)
   const { allIdsOnPage } = location.state || { allIdsOnPage: [] };
-
-  // 3. СТЕЙТЫ И РЕФ ДЛЯ КНОПКИ «короткий ответ»
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [showButton, setShowButton] = useState(false);
-  const textRef = useRef(null);
-
-  // 3а. ДОБАВЛЯЕМ НОВЫЕ СТЕЙТЫ И РЕФ ДЛЯ ПОЛНОГО ОТВЕТА
-  const [isLongExpanded, setIsLongExpanded] = useState(false);
-  const [showLongButton, setShowLongButton] = useState(false);
-  const longTextRef = useRef(null); // Отдельный реф для блока полного ответа
 
   // 4. СОЗДАЕМ СОБСТВЕННЫЙ СТЕЙТ. Изначально данных нет (null)
   const [question, setQuestion] = useState(null);
@@ -60,17 +51,13 @@ function QuestionPage() {
 
   // 4. ЭФФЕКТ ДЛЯ ЗАПРОСА ДАННЫХ. Срабатывает один раз при загрузке этой страницы
   useEffect(() => {
-    
     // Делаем запрос к API конкретно для ОДНОГО вопроса по его ID
     axios.get(`${API_BASE}/questions/public-questions/${id}`)
     .then(response => {
+      setLoading(true)
       // Достаем объект вопроса из ответа сервера
       const rawQuestion = response.data.data || response.data;
-      // 5. СОХРАНЯЕМ ДАННЫЕ В СТЕЙТ. И сразу очищаем свойство longAnswer от кавычек
-      // 1. Сначала сбрасываем состояние раскрытия кнопок в false
-      // 2. Затем записываем новые данные в стейт
-      setIsExpanded(false);
-      setIsExpanded(false); // Сбрасываем состояние кнопки на "свернуто" для нового вопроса
+        // Сброс кнопок теперь инкапсулирован внутри дочернего QuestionAnswerBlock через [htmlContent]
         setQuestion({
           ...rawQuestion,
           shortAnswer: decodeHtmlString(rawQuestion.shortAnswer),
@@ -83,32 +70,6 @@ function QuestionPage() {
       })
       .finally(() => setLoading(false));
   }, [id]); // Эффект перезапустится, если id в URL изменится
-
-// 4. ОСТАВЛЯЕМ ЭФФЕКТ ПРОВЕРКИ ДЛЯ КРАТКОГО ОТВЕТА
-useEffect(() => {
-  if (textRef.current && question?.shortAnswer) {
-    const hasOverflow = textRef.current.scrollHeight > textRef.current.clientHeight;
-    setShowButton(hasOverflow);
-  }
-}, [question?.shortAnswer]);
-
-// 5. ДОБАВЛЯЕМ НОВЫЙ ЭФФЕКТ ПРОВЕРКИ ДЛЯ ПОЛНОГО ОТВЕТА
-useEffect(() => {
-  if (longTextRef.current && question?.longAnswer) {
-    // Проверяем, превышает ли полный ответ лимит в 12 строк
-    const hasLongOverflow = longTextRef.current.scrollHeight > longTextRef.current.clientHeight;
-    setShowLongButton(hasLongOverflow);
-  }
-}, [question?.longAnswer]); // Сработает, когда длинный ответ загрузится и декодируется
-
-    // Хендлер переключения кнопки
-  const toggleExpand = () => {
-    setIsExpanded(prev => !prev);
-  };
-  // Хендлер для переключения полного ответа
-  const toggleLongExpand = () => {
-    setIsLongExpanded(prev => !prev);
-  };
 
  // Обработчики кликов: теперь мы ОБЯЗАТЕЛЬНО пробрасываем allIdsOnPage дальше при каждом navigate
   const handlePrevQuestion = () => {
@@ -125,8 +86,7 @@ useEffect(() => {
   // 6. ИНДИКАТОРЫ ЗАГРУЗКИ (Пока сервер отвечает, переменная question еще пустая)
   if (loading) return <div className={styles.centered}>Загрузка подробного ответа...</div>;
   if (error) return <div className={styles.centered}>{error} <br/> <Link to="/">Вернуться на главную</Link></div>;
-  
-  // Если вопрос не пришел с сервера
+    // Если вопрос не пришел с сервера
   if (!question) return <div className={styles.centered}>Вопрос не найден.</div>;
 
    // ДИНАМИЧЕСКИЙ СБОР ПАРАМЕТРОВ СТРОГО ДЛЯ ЭТОГО ВОПРОСА
@@ -196,49 +156,17 @@ return (
             </button>
           </div>
         </div>
-        {/* Блок с коротким ответом */}
-        <div className={`${styles.questionPage__answers} ${styles.questionPage__pading24} ${mainStyles.bcgColorWhite}`}>
-            <h2>Краткий ответ</h2>
-            <div 
-              ref={textRef}
-              className={`
-                ${styles.shortAnswerContainer} 
-                ${isExpanded ? styles.isExpanded : styles.isCollapsed}
-                ${(!isExpanded && showButton) ? styles.hasOverlay : ''}
-                ${styles.questionPage__answersText} 
-                `}
-              dangerouslySetInnerHTML={{ __html: question.shortAnswer }} 
-            />
-            {/* Кнопка управления отображением shortAnswer */}
-            {showButton && (
-              <div className={styles.btnToggleContainer}>
-                <button onClick={toggleExpand} className={styles.btnToggle}>
-                  {isExpanded ? 'Свернуть' : 'Развернуть'}
-                </button>
-              </div>
-            )}
-        </div>
-        {/* Блок с ответами */}
-        <div className={`${styles.questionPage__answers} ${styles.questionPage__pading24} ${mainStyles.bcgColorWhite} ${styles.longAnswerContainer}`}>
-            <h2>Развернутый ответ</h2>
-            <div 
-              ref={longTextRef} // Передаем новый реф сюда
-              className={`
-                ${styles.longAnswerContainer} 
-                ${isLongExpanded ? styles.longIsExpanded : styles.longIsCollapsed}
-                ${(!isLongExpanded && showLongButton) ? styles.hasLongOverlay : ''} 
-                ${styles.questionPage__answersText}`}
-              dangerouslySetInnerHTML={{ __html: question.longAnswer }} 
-            />
-                {/* Кнопка управления отображением для longAnswer */}
-            {showLongButton && (
-              <div className={styles.btnToggleContainer}>
-                <button onClick={toggleLongExpand} className={styles.btnToggle}>
-                  {isLongExpanded ? 'Свернуть' : 'Развернуть'}
-                </button>
-              </div>
-            )}
-        </div>
+        {/* ВЫНЕСЕННЫЙ БЛОК: Короткий ответ */}
+        <QuestionAnswerBlock 
+          htmlContent={question.shortAnswer} 
+          lineClamp={4} 
+        />
+        {/* ВЫНЕСЕННЫЙ БЛОК: Полный ответ */}
+        <QuestionAnswerBlock 
+          htmlContent={question.longAnswer} 
+          lineClamp={12} 
+          isLongAnswer={true} 
+        />
 
       </article>
 
