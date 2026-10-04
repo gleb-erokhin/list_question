@@ -79,34 +79,55 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   transition: max-height 0.3s ease-in-out;
-  margin-bottom: 15px;
   line-height: 1.6;
 }
 
 /* Состояние: свернуто */
 .isCollapsed {
   -webkit-line-clamp: 4; /* Ограничение в 4 строки */
-  max-height: 6.4em;    /* line-height (1.6) * 4 строки */
+  max-height: 6.4em; /* line-height (1.6) * 4 строки */
 }
-
 /* Состояние: развернуто */
 .isExpanded {
   -webkit-line-clamp: unset;
-  max-height: 1000px;   /* Запас высоты для раскрытия */
+  max-height: 1000px; /* Запас высоты для раскрытия */
 }
-
 /* Кнопка управления внутри модуля */
 .btnToggle {
   background: none;
   border: none;
-  color: #0066cc; /* Ваш цвет ссылки/кнопки */
   cursor: pointer;
-  font-weight: 500;
   padding: 0;
-  margin-bottom: 20px;
-  text-decoration: underline;
+  text-decoration: none;
+
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 14px;
+  text-align: right;
+  color: #303030;
 }
 
 .btnToggle:hover {
   text-decoration: none;
+}
+
+/* Контейнер для полного ответа */
+.longAnswerContainer {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out;
+  line-height: 1.6;
+}
+
+/* Полный ответ свернут (показываем первые 12 строк) */
+.longIsCollapsed {
+  -webkit-line-clamp: 12;
+  max-height: 19.2em; /* line-height (1.6) * 12 строк */
+}
+
+/* Полный ответ развернут */
+.longIsExpanded {
+  -webkit-line-clamp: unset;
+  max-height: 5000px; /* Большой запас для огромных статей */
 }
