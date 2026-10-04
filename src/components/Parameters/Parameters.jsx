@@ -13,7 +13,7 @@ function Parameters({ specializations, skills, activeSpecializations, setActiveS
   // console.log('2. Проводник specializations:', specializations);
 
   return (
-    <div className={styles.parameters}>
+    <div className={`${styles.parameters} ${isDetailPage ? styles.parameters_question : ''}`}>
       {/* 1. Поиск: показываем только если это НЕ страница деталки */}
       {
         !isDetailPage &&

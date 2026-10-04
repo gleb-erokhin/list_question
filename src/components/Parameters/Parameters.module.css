@@ -8,6 +8,9 @@
   padding: 24px;
   background: #fff;
 }
+.parameters_question {
+  min-width: 392px;
+}
 .parameters__types {
   display: flex;
   flex-direction: column;
