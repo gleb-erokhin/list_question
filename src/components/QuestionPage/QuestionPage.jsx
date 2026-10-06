@@ -1,4 +1,5 @@
 import mainStyles from './../Main/Main.module.css'
+import parameters from './../Parameters/parameters.module.css'
 import imgExample from './../../assets/img/imgExample.png'
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
@@ -174,7 +175,7 @@ return (
             setSearchQuery={() => {}}
           />
         ) : (
-          <div className={styles.sidebarRight} style={{ alignSelf: 'flex-start' }}>
+          <div className={`${parameters.parameters} ${parameters.parameters_question}`} style={{ alignSelf: 'flex-start' }}>
             <div className={styles.sidebarSkeletonPlaceholder}>
               {/* Можно оставить пустым или написать нежный текст загрузки параметров */}
               Загрузка параметров...
