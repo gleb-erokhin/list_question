@@ -1,0 +1,71 @@
+/* Базовый блок-заглушка */
+.skeleton {
+  background-color: #e2e8f0; /* Светло-серый цвет */
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Анимация плавного мерцания */
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+/* Заглушка под Заголовок h1 */
+.title {
+  width: 70%;
+  height: 36px;
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+
+/* Заглушка под Слайдер навигации */
+.slider {
+  width: 160px;
+  height: 38px;
+  margin-bottom: 20px;
+}
+
+/* Группа строчек для имитации текста */
+.textGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+/* Отдельные строчки текста разной длины для реалистичности */
+.line {
+  height: 16px;
+  width: 100%;
+}
+
+.lineShort {
+  width: 40%;
+}
+
+.lineMedium {
+  width: 85%;
+}
+.sidebarSkeletonPlaceholder {
+  padding: 20px;
+  background-color: #f8fafc; /* Такой же цвет фона, как у вашего дашборда */
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  color: #94a3b8;
+  font-size: 14px;
+  text-align: center;
+  min-height: 200px; /* Примерная начальная высота, чтобы зафиксировать сетку */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
