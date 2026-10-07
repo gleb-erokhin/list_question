@@ -58,3 +58,10 @@
     box-shadow: 0 4px 10px 0 rgba(106, 99, 118, 0.1);
     background: #fff;
 }
+.detailsLink {
+  font-family: var(--font-family);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 110%;
+  color: #6a0bff;
+}

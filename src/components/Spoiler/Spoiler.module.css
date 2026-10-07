@@ -31,13 +31,13 @@
 }
 /* Создаем псевдоэлемент "точка" перед текстом */
 .spoiler__title::before {
-  content: "";           /* Обязательное свойство, иначе псевдоэлемент не отобразится */
+  content: ""; /* Обязательное свойство, иначе псевдоэлемент не отобразится */
   display: inline-block; /* Позволяет задавать размеры элементу */
-  width: 8px;            /* Ширина 8px */
-  height: 8px;           /* Высота 8px */
-  background-color: #5533FF;/* Цвет точки (можете заменить на любой нужный, например #007bff) */
-  border-radius: 50%;    /* Делает квадрат круглым */
-  flex-shrink: 0;        /* Запрещает точке сжиматься, если текст заголовка слишком длинный */
+  width: 8px; /* Ширина 8px */
+  height: 8px; /* Высота 8px */
+  background-color: #5533ff; /* Цвет точки (можете заменить на любой нужный, например #007bff) */
+  border-radius: 50%; /* Делает квадрат круглым */
+  flex-shrink: 0; /* Запрещает точке сжиматься, если текст заголовка слишком длинный */
 }
 /* Анимация стрелочки */
 .spoiler__arrow {
@@ -124,19 +124,12 @@
 .spoiler__img {
   padding-bottom: 24px;
 }
-.detailsLink {
-  display: inline-block;
-  color: #6A0BFF; /* Фиолетовый цвет в тон вашей стрелочки */
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 14px;
-  padding: 6px 12px;
-  border: 1px solid #6A0BFF;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-}
+.spoiler__more {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
 
-.detailsLink:hover {
-  background-color: #6A0BFF;
-  color: #fff;
+  margin-top: 23px;
+  margin-bottom: 23px;
 }
