@@ -4,28 +4,17 @@ export default function QuestionSkeleton() {
   return (
     <>
       {/* Имитируем заголовок */}
-      <div className={`${styles.skeleton} ${styles.title}`} />
+      <div className={`${styles.skeleton} ${styles.title}`} style={{height: '208px'}}/>
       
       {/* Имитируем кнопки слайдера */}
-      <div className={`${styles.skeleton} ${styles.slider}`} />
+      <div className={`${styles.skeleton} ${styles.slider}`} style={{height: '84px'}}/>
       
       {/* Имитируем короткий ответ (4 строки) */}
-      <div className={styles.textGroup}>
-        <div className={`${styles.skeleton} ${styles.line}`} />
-        <div className={`${styles.skeleton} ${styles.line}`} />
-        <div className={`${styles.skeleton} ${styles.skeleton} ${styles.lineMedium}`} />
-        <div className={`${styles.skeleton} ${styles.lineShort}`} />
-      </div>
+      <div className={`${styles.skeleton} ${styles.slider}`} style={{height: '204px'}}/>
 
       {/* Имитируем полный ответ (более длинный блок) */}
-      <div className={styles.textGroup}>
-        <div className={`${styles.skeleton} ${styles.line}`} style={{ width: '30%', height: '24px', marginBottom: '10px' }} />
-        <div className={`${styles.skeleton} ${styles.line}`} />
-        <div className={`${styles.skeleton} ${styles.line}`} />
-        <div className={`${styles.skeleton} ${styles.line}`} />
-        <div className={`${styles.skeleton} ${styles.lineMedium}`} />
-        <div className={`${styles.skeleton} ${styles.lineShort}`} />
-      </div>
+      <div className={`${styles.skeleton} ${styles.slider}`} style={{height: '276px'}}/>
+
     </>
   );
 }

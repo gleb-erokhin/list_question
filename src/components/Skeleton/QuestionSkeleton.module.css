@@ -1,12 +1,11 @@
 /* Базовый блок-заглушка */
 .skeleton {
   background-color: #e2e8f0; /* Светло-серый цвет */
-  border-radius: 6px;
+  border-radius: 24px;
   position: relative;
   overflow: hidden;
   animation: pulse 1.5s infinite ease-in-out;
 }
-
 /* Анимация плавного мерцания */
 @keyframes pulse {
   0% {
@@ -19,42 +18,15 @@
     opacity: 0.6;
   }
 }
-
 /* Заглушка под Заголовок h1 */
 .title {
-  width: 70%;
+  width: 100%;
   height: 36px;
-  margin-top: 10px;
-  margin-bottom: 25px;
 }
-
 /* Заглушка под Слайдер навигации */
 .slider {
-  width: 160px;
+  width: 804px;
   height: 38px;
-  margin-bottom: 20px;
-}
-
-/* Группа строчек для имитации текста */
-.textGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 30px;
-}
-
-/* Отдельные строчки текста разной длины для реалистичности */
-.line {
-  height: 16px;
-  width: 100%;
-}
-
-.lineShort {
-  width: 40%;
-}
-
-.lineMedium {
-  width: 85%;
 }
 .sidebarSkeletonPlaceholder {
   padding: 20px;

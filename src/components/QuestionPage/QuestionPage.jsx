@@ -1,14 +1,14 @@
+import { API_BASE } from '../../apiCondig';
+import axios from 'axios';
+import styles from './QuestionPage.module.css'
 import mainStyles from './../Main/Main.module.css'
 import parameters from './../Parameters/parameters.module.css'
 import imgExample from './../../assets/img/imgExample.png'
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
-import { API_BASE } from '../../apiCondig';
 import Parameters from '../Parameters/Parameters';
 import QuestionAnswerBlock from './QuestionAnswerBlock';
 import QuestionSkeleton from './../Skeleton/QuestionSkeleton';
-import styles from './QuestionPage.module.css'
 import QuestionSlider from './QuestionSlider';
 
 function QuestionPage() {
