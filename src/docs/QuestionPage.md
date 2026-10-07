@@ -6,18 +6,24 @@
 • Стейты данных (question, loading, error): Управляют жизненным циклом асинхронного запроса к API. При изменении id стейт loading принудительно сбрасывается в true, предотвращая утечку данных предыдущего вопроса на экран.
 • decodeHtmlString(htmlStr): Внутренний хелпер-санитар. Регулярным выражением срезает технические кавычки бэкенда (" или "$), а через виртуальный элемент textarea декодирует экранированные спецсимволы (&lt; → <, &quot; → "), подготавливая чистый HTML для дочерних блоков.
 
+🛡️ Отказоустойчивость и защита от Null (Guard Clause):
+Чтобы избежать фатальных ошибок сборки данных (Cannot read properties of null), в теле компонента развернута строгая проверка if (question). Логика динамического сбора уникальных специализаций и навыков через Map запускается только после успешного завершения загрузки.
+
 📐 Каркас разметки (Архитектурный слой):
-<main className={mainStyles.main}>
-  <article className={styles.questionPage__inner}>
-    <h1>{question.title}</h1>
-    {/* Слайдер навигации: передаем текущий id */}
-    <QuestionSlider id={id} /> 
-    {/* Краткий ответ */}
-    <QuestionAnswerBlock key={`short-${question.id}`} htmlContent={question.shortAnswer} lineClamp={4} />
-    {/* Полный ответ */}
-    <QuestionAnswerBlock key={`long-${question.id}`} htmlContent={question.longAnswer} lineClamp={12} isLongAnswer={true} />
+Компонент формирует общую двухблочную CSS-сетку дашборда с локальным переключением внутренних состояний:
+
+<main className={styles.layoutDashboard}>
+  <article className={styles.mainContentLeft}>
+    {/* Локальный тернарный оператор загрузки и ошибок */}
+    {loading ? <QuestionSkeleton /> : error ? <QuestionError /> : <QuestionContent />}
   </article>
-  <Parameters isDetailPage={true} question={question} />
+
+  {/* Component Guard: Parameters рендерится только при наличии объекта question */}
+  {question ? (
+    <Parameters isDetailPage={true} question={question} />
+  ) : (
+    <div className={styles.sidebarSkeletonPlaceholder}>Загрузка параметров...</div>
+  )}
 </main>
 
 
