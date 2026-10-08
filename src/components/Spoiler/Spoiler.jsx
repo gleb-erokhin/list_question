@@ -4,7 +4,7 @@ import styles from './Spoiler.module.css'
 import mainStyles from './../Main/Main.module.css'
 
 
-function Spoiler({ id, title, children, spoilerImg, reating, difficult, allIdsOnPage }) {
+function Spoiler({ id, title, children, spoilerImg, rate, complexity, allIdsOnPage }) {
   // 2. Создаем состояние: по умолчанию спойлер закрыт (false)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -33,11 +33,11 @@ function Spoiler({ id, title, children, spoilerImg, reating, difficult, allIdsOn
         {/* 5. Класс 'is-open' теперь добавляется динамически в зависимости от isOpen */}
         <div className={styles.spoiler__content} data-open={isOpen}>
           <div className={styles.spoiler__inner}>
-            {reating && difficult ?             
+            {rate && complexity ?             
             <div className={styles.spoiler__levels}>
               <div className={styles.spoiler__levels_block}>
-                <div className={styles.spoiler__marker}>Рейтинг: <span>{reating}</span></div>
-                <div className={styles.spoiler__marker}>Сложность: <span>{difficult}</span></div>
+                <div className={styles.spoiler__marker}>Рейтинг: <span>{rate}</span></div>
+                <div className={styles.spoiler__marker}>Сложность: <span>{complexity}</span></div>
               </div>
               <svg width="3" height="15" viewBox="0 0 3 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g opacity="0.8">

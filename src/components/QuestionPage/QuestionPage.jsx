@@ -91,7 +91,7 @@ function QuestionPage() {
     });
   }
 
-return (
+  return (
   <main className={mainStyles.main}>
     <Link to="/" className={`${styles.questionPage__backBtn} ${mainStyles.detailsLink}`}>
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -100,7 +100,6 @@ return (
       Назад
     </Link>
     <div className={mainStyles.main__wrapper} style={{ padding: '20px' }}>
-      
       {/* ЛЕВЫЙ БЛОК: Подробное описание вопроса */}
       <article className={styles.questionPage__inner}>
         {
@@ -156,6 +155,8 @@ return (
           <Parameters 
             // флаг, который сообщит компоненту, что это страница QuestionPage и необходимо отображать только ограниченные компоненты
             isDetailPage={true} 
+
+            question={question}
 
             specializations={uniqueSpecs}
             skills={uniqueSkills}

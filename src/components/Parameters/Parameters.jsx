@@ -1,15 +1,15 @@
 import Grade from './BlockTypes/Grade'
+import Levels from './BlockTypes/Levels'
 import Qualifications from './BlockTypes/Qualifications'
 import Rank from './BlockTypes/Rank'
 import styles from './Parameters.module.css'
 import Search from './Search'
 
 function Parameters({ specializations, skills, activeSpecializations, setActiveSpecializations, activeSkills,
-  setActiveSkills, activeDifficulties, setActiveDifficulties, activeRatings, setActiveRatings, searchQuery,setSearchQuery, isDetailPage=false }) {
+  setActiveSkills, activeDifficulties, setActiveDifficulties, activeRatings, setActiveRatings, searchQuery,setSearchQuery, isDetailPage=false, question = null }) {
     
   const difficult = ['1-3',' 4-6', '7-8', '9-10']
   const status = ['Изученные', 'Не изученные', 'Все']
-
   // console.log('2. Проводник specializations:', specializations);
 
   return (
@@ -32,10 +32,18 @@ function Parameters({ specializations, skills, activeSpecializations, setActiveS
           setActiveSpecializations={setActiveSpecializations}
         />
       }
+      {
+        isDetailPage && question &&
+        <Levels 
+          title='Уровень'
+          question={question}
+        />
+      }
       {/* Передаем массив навыков и стейты фильтра вниз, на страницу вопроса добавляется навык из конкретного вопроса передаваемый в АПИ QuestionPage */}
       <Grade 
         title='Навыки'
         items={skills}
+        isDetailPage={isDetailPage}
         activeSkills={activeSkills}
         setActiveSkills={setActiveSkills}
       />

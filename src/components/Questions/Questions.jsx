@@ -21,8 +21,8 @@ function Questions({ items, currentPage, totalPages, setCurrentPage }) {
                   title={item.title}
                   id={item.id} 
                   spoilerImg={item.imageSrc} 
-                  reating={item.rate} 
-                  difficult={item.complexity}
+                  rate={item.rate} 
+                  complexity={item.complexity}
                   // Передаем весь массив ID текущей страницы пропсом
                   allIdsOnPage={allIdsOnPage}
                 >

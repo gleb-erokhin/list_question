@@ -133,3 +133,9 @@
   margin-top: 23px;
   margin-bottom: 23px;
 }
+.spoiler__levels_padding {
+  padding: 0;
+}
+.spoiler__levels_padding > .spoiler__levels_block {
+  gap: 16px;
+}
