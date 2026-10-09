@@ -10,6 +10,7 @@ import Parameters from '../Parameters/Parameters';
 import QuestionAnswerBlock from './QuestionAnswerBlock';
 import QuestionSkeleton from './../Skeleton/QuestionSkeleton';
 import QuestionSlider from './QuestionSlider';
+import Guru from '../Parameters/BlockTypes/Guru';
 
 function QuestionPage() {
   // Извлекаем параметры окружения и навигации, Достаем ID вопроса из адресной строки (например, если URL /questions/2, то id = 2)
@@ -148,46 +149,48 @@ function QuestionPage() {
           )
         }
       </article>
+      <div className={styles.questionPage__rightBlock}>
+        {/* ПРАВЫЙ БЛОК: Параметры конкретного вопроса */}
+        {
+          question ? (
+            <Parameters 
+              // флаг, который сообщит компоненту, что это страница QuestionPage и необходимо отображать только ограниченные компоненты
+              isDetailPage={true} 
 
-      {/* ПРАВЫЙ БЛОК: Параметры конкретного вопроса */}
-      {
-        question ? (
-          <Parameters 
-            // флаг, который сообщит компоненту, что это страница QuestionPage и необходимо отображать только ограниченные компоненты
-            isDetailPage={true} 
+              question={question}
 
-            question={question}
+              specializations={uniqueSpecs}
+              skills={uniqueSkills}
+              
+              // Передаем пустые заглушки для стейтов, так как кликать и фильтровать здесь ничего не нужно
+              activeSpecializations={[]}
+              setActiveSpecializations={() => {}}
+              activeSkills={[]}
+              setActiveSkills={() => {}}
+              
+              // Для сложности, рейтинга и статуса передаем данные текущего вопроса напрямую
+              activeDifficulties={[`${question.complexity}-${question.complexity}`]} // Подсветит нужный диапазон
+              setActiveDifficulties={() => {}}
+              
+              activeRatings={[question.rate]} // Подсветит нужную цифру рейтинга
+              setActiveRatings={() => {}}
+              
+              activeStatus={question.isLearned ? 'Изученные' : 'Не изученные'} // Подсветит статус вопроса
+              setActiveStatus={() => {}}
 
-            specializations={uniqueSpecs}
-            skills={uniqueSkills}
-            
-            // Передаем пустые заглушки для стейтов, так как кликать и фильтровать здесь ничего не нужно
-            activeSpecializations={[]}
-            setActiveSpecializations={() => {}}
-            activeSkills={[]}
-            setActiveSkills={() => {}}
-            
-            // Для сложности, рейтинга и статуса передаем данные текущего вопроса напрямую
-            activeDifficulties={[`${question.complexity}-${question.complexity}`]} // Подсветит нужный диапазон
-            setActiveDifficulties={() => {}}
-            
-            activeRatings={[question.rate]} // Подсветит нужную цифру рейтинга
-            setActiveRatings={() => {}}
-            
-            activeStatus={question.isLearned ? 'Изученные' : 'Не изученные'} // Подсветит статус вопроса
-            setActiveStatus={() => {}}
-
-            searchQuery=""
-            setSearchQuery={() => {}}
-          />
-        ) : (
-          <div className={`${parameters.parameters} ${parameters.parameters_question}`} style={{ alignSelf: 'flex-start' }}>
-            <div className={styles.sidebarSkeletonPlaceholder}>
-              {/* Можно оставить пустым или написать нежный текст загрузки параметров */}
-              Загрузка параметров...
+              searchQuery=""
+              setSearchQuery={() => {}}
+            />
+          ) : (
+            <div className={`${parameters.parameters} ${parameters.parameters_question}`} style={{ alignSelf: 'flex-start' }}>
+              <div className={styles.sidebarSkeletonPlaceholder}>
+                {/* Можно оставить пустым или написать нежный текст загрузки параметров */}
+                Загрузка параметров...
+              </div>
             </div>
-          </div>
-        )}
+          )}
+          <Guru />
+        </div>
     </div>
   </main>
   );

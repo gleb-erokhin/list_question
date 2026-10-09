@@ -75,3 +75,8 @@
   gap: 8px;
   margin-left: 20px;
 }
+.questionPage__rightBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

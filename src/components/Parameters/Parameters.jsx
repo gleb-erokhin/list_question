@@ -1,4 +1,5 @@
 import Grade from './BlockTypes/Grade'
+import KeyWords from './BlockTypes/KeyWords'
 import Levels from './BlockTypes/Levels'
 import Qualifications from './BlockTypes/Qualifications'
 import Rank from './BlockTypes/Rank'
@@ -47,6 +48,13 @@ function Parameters({ specializations, skills, activeSpecializations, setActiveS
         activeSkills={activeSkills}
         setActiveSkills={setActiveSkills}
       />
+      {
+        isDetailPage && question &&
+        <KeyWords 
+          title='Ключевые слова'
+          question={question}
+        />
+      }
       {/* Остальные компоненты ниже тоже скрываем для страницы вопроса */}
       {
         !isDetailPage &&
