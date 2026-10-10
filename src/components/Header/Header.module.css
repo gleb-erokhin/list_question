@@ -30,7 +30,13 @@
 .header__navList {
   display: flex;
   list-style-type: none;
+  margin: 0;
+  padding: 0;
   gap: 20px;
+  border-radius: 16px;
+}
+.header__navListItem a:hover {
+  color: #0066cc;
 }
 /* Шапка спойлера на десктопе полностью скрыта */
 .header__navHeader {
@@ -40,6 +46,12 @@
   display: flex;
   align-items: center;
   gap: 16px;
+}
+/* Общие стили кнопок (для обоих блоков) */
+.header__buttons_desktop,
+.header__buttons_mobile {
+  display: flex;
+  gap: 12px;
 }
 .header__buttons {
   display: flex;
@@ -60,7 +72,25 @@
 .header__burger {
   display: none; /* Скрыт на десктопе */
 }
+.header__login, .header__register {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+/* Изначально прячем мобильный блок кнопок на десктопе */
+.header__buttons_mobile {
+  display: none;
+}
+.header__burger {
+  display: none;
+}
 @media (max-width: 1024px) {
+    /* ДЕСКТОПНЫЙ БЛОК МГНОВЕННО ИСЧЕЗАЕТ — МОРГАТЬ НЕЧЕМУ */
+  .header__buttons_desktop {
+    display: none !important;
+  }
   /* ----------------------------------------
      ТРАНСФОРМАЦИЯ НАВИГАЦИИ В ИНТЕРАКТИВНЫЙ СПОЙЛЕР
      ---------------------------------------- */
@@ -170,7 +200,8 @@
   /* ----------------------------------------
      ТРАНСФОРМАЦИЯ БЛОКА КНОПОК В БУРГЕР-МЕНЮ
      ---------------------------------------- */
-  .header__buttons {
+  .header__buttons_mobile {
+    display: flex;
     position: absolute;
     top: 70px; /* Встает ровно ПОД спойлер навигации (70px шапка + ~60px спойлер) */
     right: 30px;
@@ -180,7 +211,7 @@
     gap: 12px;
     padding: 20px;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-    border-radius: 24px;
+    border-radius: 16px;
     z-index: 97;
 
     /* Изначально блок кнопок скрыт */
@@ -194,7 +225,7 @@
   }
 
   /* Класс открытия бургер-меню */
-  .header__buttons_open {
+  .header__buttons_mobileOpen {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);

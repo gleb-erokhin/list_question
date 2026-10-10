@@ -3,6 +3,7 @@ import logo from '../../assets/img/logo.svg'
 import yeahub from '../../assets/img/yeahub.png'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import AuthButtons from './AuthButton/AuthButtons'
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)   // Для бургер-меню (кнопки входа)
@@ -53,6 +54,11 @@ function Header() {
           </ul>
         </nav>
 
+        {/* ДЕСКТОПНЫЕ КНОПКИ: Видны только > 1024px */}
+        <AuthButtons
+          className={`${styles.header__buttons_desktop}`}
+        />
+
         {/* ВНЕШНЯЯ КНОПКА БУРГЕРА (Появляется на 1024px и управляет ТОЛЬКО кнопками входа) */}
         <button 
           className={`${styles.header__burger} ${isMenuOpen ? styles.header__burger_active : ''}`}
@@ -64,11 +70,10 @@ function Header() {
           <span></span>
         </button>
 
-        {/* 2. БЛОК КНОПОК ВХОДА (На 1024px прячется в бургер-меню) */}
-        <div className={`${styles.header__buttons} ${isMenuOpen ? styles.header__buttons_open : ''}`}>
-          <button className={styles.header__login}>Вход</button>
-          <button className={styles.header__register}>Регистрация</button>
-        </div>
+        {/* МОБИЛЬНОЕ БУРГЕР-МЕНЮ: Выпадает по клику на бургер */}
+        <AuthButtons 
+          className={`${styles.header__buttons_mobile} ${isMenuOpen ? styles.header__buttons_mobileOpen : ''}`}
+        />
 
       </div>
     </header>
