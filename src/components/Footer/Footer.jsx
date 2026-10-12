@@ -1,6 +1,5 @@
 import styles from './Footer.module.css'
-
-import { FaFigma, FaTelegramPlane, FaYoutube, FaTiktok, FaGithub   } from "react-icons/fa";
+import Social from './Social'
 
 function Footer() {
   return (
@@ -20,30 +19,16 @@ function Footer() {
         </div>
         <h3 className={styles.footer__slogan}>Выбери, каким будет IT завтра, вместе с нами</h3>  
         <p className={styles.footer__about}>YeaHub — это полностью открытый проект, призванный объединить и улучшить IT-сферу. Наш исходный код доступен для просмотра на GitHub. Дизайн проекта также открыт для ознакомления в Figma.</p>
+        <div className={styles.footer__line}></div>
         <div className={styles.footer__inner}>
           <div className={styles.footer__left}>
             <div className={styles.footer__copy}>© 2024 YeaHub</div>
             <div className={styles.footer__docs}>Документы</div>
+            <Social />
           </div>
           <div className={styles.footer__right}>
             <div className={styles.footer__find}>Ищите нас и в других соцсетях @yeahub_it</div>
-            <div className={styles.footer__social}>
-              <a href='#!' className={styles.social__link}>
-                <FaFigma />
-              </a>
-              <a href='#!' className={styles.social__link}>
-                <FaTelegramPlane />
-              </a>
-              <a href='#!' className={styles.social__link}>
-                <FaYoutube />
-              </a>
-              <a href='#!' className={styles.social__link}>
-                <FaTiktok />
-              </a>
-              <a href='#!' className={styles.social__link}>
-                <FaGithub />
-              </a>
-            </div>
+            <Social />
           </div>
         </div>
       </div>

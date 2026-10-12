@@ -87,3 +87,9 @@
   text-decoration: none;
   cursor: not-allowed;
 }
+
+@media (max-width: 1340px) {
+  .parameters {
+    display: none !important;
+  }
+}

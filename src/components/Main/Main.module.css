@@ -54,9 +54,9 @@
   font-weight: bold;
 }
 .bcgColorWhite {
-    border-radius: 24px;
-    box-shadow: 0 4px 10px 0 rgba(106, 99, 118, 0.1);
-    background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 4px 10px 0 rgba(106, 99, 118, 0.1);
+  background: #fff;
 }
 .detailsLink {
   font-family: var(--font-family);
@@ -64,4 +64,25 @@
   font-size: 16px;
   line-height: 110%;
   color: #6a0bff;
+}
+@media (max-width: 1340px) {
+  .main__wrapper {
+    justify-content: center;
+  }
+}
+@media (max-width: 1024px) {
+  .main {
+    padding-top: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 100px;
+  }
+}
+@media (max-width: 425px) {
+  .main {
+    padding-top: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 60px;
+  }
 }

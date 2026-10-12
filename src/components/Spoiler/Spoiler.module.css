@@ -12,7 +12,7 @@
   align-items: center;
 
   width: 100%;
-  padding: 24px;
+  padding: 16px 16px 24px;
   border: none;
   cursor: pointer;
   text-align: left;
@@ -138,4 +138,22 @@
 }
 .spoiler__levels_padding > .spoiler__levels_block {
   gap: 16px;
+}
+@media (max-width: 425px) {
+  .spoiler__title {
+    font-size: 16px;
+    line-height: 130%;
+  }
+  .spoiler__header {
+    padding: 20px 10px 16px;
+  }
+  .spoiler__levels {
+    font-size: 12px;
+  }
+  .spoiler__levels_block {
+    gap: 16px;
+  }
+  .spoiler__img {
+    padding-bottom: 16px;
+  }
 }
