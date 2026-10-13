@@ -36,18 +36,27 @@ function Main() {
   // =======================================================
   useEffect(() => {
     if (isSidebarOpen) {
-      // Блокируем прокрутку основного сайта
+      // 1. Вычисляем ширину полосы прокрутки в браузере прямо сейчас
+      // window.innerWidth — ширина окна со скроллбаром, document.documentElement.clientWidth — без него
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+      // 2. Блокируем скролл фона
       document.body.style.overflow = 'hidden';
+
+      // 3. Добавляем body правый паддинг, равный ширине исчезнувшего скроллбара
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
     } else {
-      // Возвращаем прокрутку обратно
+      // Возвращаем исходное состояние
       document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
     }
 
-    // Функция очистки (Cleanup) — сработает, если компонент размонтируется
+    // Функция очистки (Cleanup) на случай размонтирования компонента
     return () => {
       document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
     };
-  }, [isSidebarOpen]); // Перезапускается каждый раз при клике на фильтры
+  }, [isSidebarOpen]);
 
   // Функция для очистки кавычек и декодирования HTML-тегов
   const decodeHtmlString = (htmlStr) => {

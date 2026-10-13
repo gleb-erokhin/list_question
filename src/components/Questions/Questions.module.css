@@ -14,7 +14,7 @@
   margin-bottom: 24px;
 }
 .questions__openParamBtn {
-  /* display: none; */
+  display: none;
 }
 .questions__title {
   font-family: var(--font-family);
@@ -148,6 +148,7 @@ iframe {
   }
   .questions__openParamBtn {
     display: unset;
+    cursor: pointer;
   }
 }
 @media (max-width: 768px) {
