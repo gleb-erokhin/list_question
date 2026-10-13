@@ -31,6 +31,24 @@ function Main() {
   const openSidebar = () => setIsSidebarOpen(true);
   const closeSidebar = () => setIsSidebarOpen(false);
 
+  // =======================================================
+  // ЭФФЕКТ SCROLL LOCK (Блокировка прокрутки фона)
+  // =======================================================
+  useEffect(() => {
+    if (isSidebarOpen) {
+      // Блокируем прокрутку основного сайта
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Возвращаем прокрутку обратно
+      document.body.style.overflow = '';
+    }
+
+    // Функция очистки (Cleanup) — сработает, если компонент размонтируется
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isSidebarOpen]); // Перезапускается каждый раз при клике на фильтры
+
   // Функция для очистки кавычек и декодирования HTML-тегов
   const decodeHtmlString = (htmlStr) => {
     if (typeof htmlStr !== 'string') return '';
