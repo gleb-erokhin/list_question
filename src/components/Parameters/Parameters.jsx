@@ -5,6 +5,7 @@ import Qualifications from './BlockTypes/Qualifications'
 import Rank from './BlockTypes/Rank'
 import styles from './Parameters.module.css'
 import Search from './Search'
+import closeBtn from './../../assets/img/closeBtn.png'
 
 function Parameters({ specializations, skills, activeSpecializations, setActiveSpecializations, activeSkills,
   setActiveSkills, activeDifficulties, setActiveDifficulties, activeRatings, setActiveRatings, searchQuery,setSearchQuery, isDetailPage=false, question = null }) {
@@ -14,7 +15,10 @@ function Parameters({ specializations, skills, activeSpecializations, setActiveS
   // console.log('2. Проводник specializations:', specializations);
 
   return (
-    <div className={`${styles.parameters} ${isDetailPage ? styles.parameters_question : ''}`}>
+    <div className={`${styles.parameters} ${isDetailPage ? styles.parameters__question : ''} ${styles.display}`}>
+      <button className={styles.parameters__closeBtn}>
+        <img className={styles.parameters__img} src={closeBtn} alt="closeBtn" />
+      </button>
       {/* 1. Поиск: показываем только если это НЕ страница вопроса */}
       {
         !isDetailPage &&

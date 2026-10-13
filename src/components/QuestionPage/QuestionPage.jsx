@@ -54,12 +54,6 @@ function QuestionPage() {
       .finally(() => setLoading(false));
   }, [id]); // Эффект перезапустится, если id в URL изменится
 
-  // ИНДИКАТОРЫ ЗАГРУЗКИ (Пока сервер отвечает, переменная question еще пустая)
-  // if (loading) return <div className={styles.centered}>Загрузка подробного ответа...</div>;
-  // if (error) return <div className={styles.centered}>{error} <br/> <Link to="/">Вернуться на главную</Link></div>;
-    // Если вопрос не пришел с сервера
-  // if (!question) return <div className={styles.centered}>Вопрос не найден.</div>;
-
   // =======================================================
   // ЗАЩИЩЕННЫЙ ДИНАМИЧЕСКИЙ СБОР ПАРАМЕТРОВ ДЛЯ ЭТОГО ВОПРОСА
   // Передаем в сборщик массив из одного вопроса, и код сам вытащит нужные ID и Title

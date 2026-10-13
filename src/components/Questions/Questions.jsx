@@ -2,6 +2,7 @@ import Pagination from '../Pagination/Pagination'
 import Spoiler from '../Spoiler/Spoiler'
 import styles from './Questions.module.css'
 import mainStyles from './../Main/Main.module.css'
+import openParam from './../../assets/img/openParam.png'
 
 function Questions({ items, currentPage, totalPages, setCurrentPage }) {
    // Собираем плоский массив всех ID текущей страницы, например: [12, 15, 88, 104...]
@@ -10,7 +11,12 @@ function Questions({ items, currentPage, totalPages, setCurrentPage }) {
   return (
     <>
       <div className={`${styles.questions} ${mainStyles.bcgColorWhite}`}>
-        <h2 className={styles.questions__title}>Вопросы React, JavaScript</h2>
+        <div className={styles.questions__titleBlock}>
+          <h2 className={styles.questions__title}>Вопросы React, JavaScript</h2>
+          <button className={styles.questions__openParamBtn}>
+            <img src={openParam} alt="openParam" />
+          </button>
+        </div>
         <div className={styles.spoilers}>
           {
             items.map((item) => {

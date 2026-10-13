@@ -1,9 +1,6 @@
 /* Стили */
 .main {
-  padding-top: 41px;
-  padding-left: 112px;
-  padding-right: 112px;
-  padding-bottom: 150px;
+  padding: 41px 112px 150px;
   background: #f4f4f4;
   margin: 0 auto;
   max-width: 1440px;
@@ -12,6 +9,7 @@
   display: flex;
   flex-direction: row;
   gap: 20px;
+  position: relative;
 }
 .main__parameters {
   width: 394px;

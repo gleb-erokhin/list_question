@@ -115,7 +115,7 @@
 }
 .spoiler__marker span {
   border-radius: 4px;
-  padding: 2px 4px;
+  padding: 3px 5px;
   min-width: 17px;
   height: 21px;
   background: #6a0bff;
@@ -130,8 +130,8 @@
   justify-content: flex-end;
   gap: 8px;
 
-  margin-top: 23px;
-  margin-bottom: 23px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 .spoiler__levels_padding {
   padding: 0;
