@@ -24,6 +24,13 @@ function Main() {
   // Хранилище для таймера, чтобы очищать его при быстром наборе текста
   const debounceTimerRef = useRef(null);
 
+  // общий стейт для управления видимостью сайдбара
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Хендлеры для открытия и закрытия
+  const openSidebar = () => setIsSidebarOpen(true);
+  const closeSidebar = () => setIsSidebarOpen(false);
+
   // Функция для очистки кавычек и декодирования HTML-тегов
   const decodeHtmlString = (htmlStr) => {
     if (typeof htmlStr !== 'string') return '';
@@ -152,6 +159,7 @@ function Main() {
           currentPage={currentPage}
           totalPages={totalPages}
           setCurrentPage={setCurrentPage}
+          onOpenFilters={openSidebar}
         />
         {/* 5. Передаем списки и управление фильтром в блок параметров */}
         <Parameters 
@@ -190,6 +198,9 @@ function Main() {
           setSearchQuery(val);
           setCurrentPage(1); // При вводе текста тоже перекидываем пользователя на 1-ю страницу результатов
           }}
+          // 7. Передаем пропсы на закрытие компонента параметерс в ширене мнее 1340
+          isFiltersVisible={isSidebarOpen} // Передаем статус
+          onCloseFilters={closeSidebar}    // Передаем функцию закрытия
         />
       </section>
     </main>

@@ -98,21 +98,30 @@
   cursor: not-allowed;
 }
 
-
-
 @media (max-width: 1340px) {
   .parameters__closeBtn {
     display: unset;
   }
   .parameters {
-    display: none;
     position: fixed;
-    border-radius: 0;
     right: 0px;
     top: 65px;
+    border-radius: 0;
     box-shadow: 0 4px 10px 0 rgba(106, 99, 118, 0.1);
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(100%); /* прячем сайдбар за правый край экрана */
+    /* НАСТРОЙКА ПЛАВНОСТИ (0.3 секунды, мягкое ускорение и замедление) */
+    transition:
+      transform 0.3s ease-in-out,
+      opacity 0.25s ease-in-out,
+      visibility 0.25s;
+    overflow-y: auto;
   }
   .display {
-  display: flex;
-}
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0); /* Сайдбар плавно выезжает обратно на экран */
+  }
 }

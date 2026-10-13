@@ -8,15 +8,15 @@ import Search from './Search'
 import closeBtn from './../../assets/img/closeBtn.png'
 
 function Parameters({ specializations, skills, activeSpecializations, setActiveSpecializations, activeSkills,
-  setActiveSkills, activeDifficulties, setActiveDifficulties, activeRatings, setActiveRatings, searchQuery,setSearchQuery, isDetailPage=false, question = null }) {
+  setActiveSkills, activeDifficulties, setActiveDifficulties, activeRatings, setActiveRatings, searchQuery,setSearchQuery, isDetailPage=false, question = null, isFiltersVisible, onCloseFilters }) {
     
   const difficult = ['1-3',' 4-6', '7-8', '9-10']
   const status = ['Изученные', 'Не изученные', 'Все']
   // console.log('2. Проводник specializations:', specializations);
 
   return (
-    <div className={`${styles.parameters} ${isDetailPage ? styles.parameters__question : ''} ${styles.display}`}>
-      <button className={styles.parameters__closeBtn}>
+    <div className={`${styles.parameters} ${isDetailPage ? styles.parameters__question : ''} ${isFiltersVisible ? styles.display : ''}`}>
+      <button className={styles.parameters__closeBtn} onClick={onCloseFilters}>
         <img className={styles.parameters__img} src={closeBtn} alt="closeBtn" />
       </button>
       {/* 1. Поиск: показываем только если это НЕ страница вопроса */}

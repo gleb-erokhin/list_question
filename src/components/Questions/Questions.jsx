@@ -4,7 +4,7 @@ import styles from './Questions.module.css'
 import mainStyles from './../Main/Main.module.css'
 import openParam from './../../assets/img/openParam.png'
 
-function Questions({ items, currentPage, totalPages, setCurrentPage }) {
+function Questions({ items, currentPage, totalPages, setCurrentPage, onOpenFilters }) {
    // Собираем плоский массив всех ID текущей страницы, например: [12, 15, 88, 104...]
   const allIdsOnPage = items.map(item => item.id);
 
@@ -13,7 +13,7 @@ function Questions({ items, currentPage, totalPages, setCurrentPage }) {
       <div className={`${styles.questions} ${mainStyles.bcgColorWhite}`}>
         <div className={styles.questions__titleBlock}>
           <h2 className={styles.questions__title}>Вопросы React, JavaScript</h2>
-          <button className={styles.questions__openParamBtn}>
+          <button className={styles.questions__openParamBtn} onClick={onOpenFilters}>
             <img src={openParam} alt="openParam" />
           </button>
         </div>
