@@ -4,6 +4,7 @@ import styles from './QuestionPage.module.css'
 import mainStyles from './../Main/Main.module.css'
 import parameters from './../Parameters/parameters.module.css'
 import imgExample from './../../assets/img/imgExample.png'
+import filterBtn from './../../assets/img/filterBtn.png'
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Parameters from '../Parameters/Parameters';
@@ -12,7 +13,7 @@ import QuestionSkeleton from './../Skeleton/QuestionSkeleton';
 import QuestionSlider from './QuestionSlider';
 import Guru from '../Parameters/BlockTypes/Guru';
 
-function QuestionPage() {
+function QuestionPage({onOpenFilters}) {
   // Извлекаем параметры окружения и навигации, Достаем ID вопроса из адресной строки (например, если URL /questions/2, то id = 2)
   const { id } = useParams();
   // СОЗДАЕМ СОБСТВЕННЫЙ СТЕЙТ. Изначально данных нет (null)
@@ -118,7 +119,12 @@ function QuestionPage() {
               <div className={`${styles.questionPage__header} ${styles.questionPage__pading24} ${mainStyles.bcgColorWhite}`}>
                 <img className={styles.questionPage__img} src={`${!question.imageSrc && imgExample}`} alt="image from question" />
                 <div className={styles.questionPage__desc}>
-                  <h1>{question.title}</h1> 
+                  <div className={styles.questionPage__titleParam}>
+                    <h1>{question.title}</h1> 
+                    <button className={styles.questions__openParamBtn} onClick={onOpenFilters}>
+                      <img src={filterBtn} alt="filterBtn" />
+                    </button>
+                  </div>
                   <p className={styles.questionPage__about}>{question.description}</p> 
                 </div>
               </div>

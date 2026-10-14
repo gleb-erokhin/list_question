@@ -18,7 +18,8 @@
   height: 160px;
 }
 .questionPage__desc {
-  max-width: 366px;
+  display: flex;
+  flex-direction: column;
 
   font-family: var(--font-family);
   font-weight: 500;
@@ -28,6 +29,11 @@
 }
 .questionPage__desc h1 {
   margin-bottom: 16px;
+}
+.questionPage__titleParam {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
 }
 .questionPage__about {
   font-size: 16px;
