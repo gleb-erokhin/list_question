@@ -238,3 +238,8 @@
     padding: 12px;
   }
 }
+@media (max-width: 425px) {
+  .header__logo {
+    padding-right: 20px;
+  }
+}
