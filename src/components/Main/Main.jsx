@@ -4,6 +4,7 @@ import { API_BASE } from '../../apiCondig';
 import Parameters from '../Parameters/Parameters'
 import Qestions from '../Questions/Questions'
 import styles from './Main.module.css'
+import useSidebar from './../Hooks/useSidebar'
 
 function Main() {
   const [questions, setQuestions] = useState([]);
@@ -24,39 +25,8 @@ function Main() {
   // Хранилище для таймера, чтобы очищать его при быстром наборе текста
   const debounceTimerRef = useRef(null);
 
-  // общий стейт для управления видимостью сайдбара
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  // Хендлеры для открытия и закрытия
-  const openSidebar = () => setIsSidebarOpen(true);
-  const closeSidebar = () => setIsSidebarOpen(false);
-
-  // =======================================================
-  // ЭФФЕКТ SCROLL LOCK (Блокировка прокрутки фона)
-  // =======================================================
-  useEffect(() => {
-    if (isSidebarOpen) {
-      // 1. Вычисляем ширину полосы прокрутки в браузере прямо сейчас
-      // window.innerWidth — ширина окна со скроллбаром, document.documentElement.clientWidth — без него
-      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-
-      // 2. Блокируем скролл фона
-      document.body.style.overflow = 'hidden';
-
-      // 3. Добавляем body правый паддинг, равный ширине исчезнувшего скроллбара
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
-    } else {
-      // Возвращаем исходное состояние
-      document.body.style.overflow = '';
-      document.body.style.paddingRight = '';
-    }
-
-    // Функция очистки (Cleanup) на случай размонтирования компонента
-    return () => {
-      document.body.style.overflow = '';
-      document.body.style.paddingRight = '';
-    };
-  }, [isSidebarOpen]);
+  // Вызываем хук и деструктурируем готовые методы
+  const { isSidebarOpen, openSidebar, closeSidebar } = useSidebar();
 
   // Функция для очистки кавычек и декодирования HTML-тегов
   const decodeHtmlString = (htmlStr) => {
@@ -226,6 +196,7 @@ function Main() {
           setCurrentPage(1); // При вводе текста тоже перекидываем пользователя на 1-ю страницу результатов
           }}
           // 7. Передаем пропсы на закрытие компонента параметерс в ширене мнее 1340
+          isDetailPage={false}
           isFiltersVisible={isSidebarOpen} // Передаем статус
           onCloseFilters={closeSidebar}    // Передаем функцию закрытия
         />

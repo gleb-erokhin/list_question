@@ -12,14 +12,18 @@ import QuestionAnswerBlock from './QuestionAnswerBlock';
 import QuestionSkeleton from './../Skeleton/QuestionSkeleton';
 import QuestionSlider from './QuestionSlider';
 import Guru from '../Parameters/BlockTypes/Guru';
+import useSidebar from './../Hooks/useSidebar'
 
-function QuestionPage({onOpenFilters}) {
+function QuestionPage() {
   // Извлекаем параметры окружения и навигации, Достаем ID вопроса из адресной строки (например, если URL /questions/2, то id = 2)
   const { id } = useParams();
   // СОЗДАЕМ СОБСТВЕННЫЙ СТЕЙТ. Изначально данных нет (null)
   const [question, setQuestion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // ПОДКЛЮЧАЕМ УНИВЕРСАЛЬНЫЙ ХУК для sideBar
+  const { isSidebarOpen, setIsSidebarOpen, openSidebar, closeSidebar } = useSidebar();
 
   // Хелпер декодирования HTML (тот же, что мы делали для MainPage)
   const decodeHtmlString = (htmlStr) => {
@@ -39,6 +43,7 @@ function QuestionPage({onOpenFilters}) {
     axios.get(`${API_BASE}/questions/public-questions/${id}`)
     .then(response => {
       setLoading(true)
+      setIsSidebarOpen(false); // Сбрасываем шторку через метод хука при смене вопроса
       // Достаем объект вопроса из ответа сервера
       const rawQuestion = response.data.data || response.data;
         // Сброс кнопок, инкапсулирован внутри дочернего QuestionAnswerBlock через [htmlContent]
@@ -53,7 +58,7 @@ function QuestionPage({onOpenFilters}) {
         setError('Не удалось загрузить подробный ответ.');
       })
       .finally(() => setLoading(false));
-  }, [id]); // Эффект перезапустится, если id в URL изменится
+  }, [id, setIsSidebarOpen]); // Эффект перезапустится, если id в URL изменится
 
   // =======================================================
   // ЗАЩИЩЕННЫЙ ДИНАМИЧЕСКИЙ СБОР ПАРАМЕТРОВ ДЛЯ ЭТОГО ВОПРОСА
@@ -121,7 +126,7 @@ function QuestionPage({onOpenFilters}) {
                 <div className={styles.questionPage__desc}>
                   <div className={styles.questionPage__titleParam}>
                     <h1>{question.title}</h1> 
-                    <button className={styles.questions__openParamBtn} onClick={onOpenFilters}>
+                    <button className={styles.questions__openParamBtn} onClick={openSidebar}>
                       <img src={filterBtn} alt="filterBtn" />
                     </button>
                   </div>
@@ -180,6 +185,10 @@ function QuestionPage({onOpenFilters}) {
 
               searchQuery=""
               setSearchQuery={() => {}}
+
+              // передаем пропсы для закрытия параметров конкретного вопроса
+              isFiltersVisible={isSidebarOpen} 
+              onCloseFilters={closeSidebar} 
             />
           ) : (
             <div className={`${parameters.parameters} ${parameters.parameters_question}`} style={{ alignSelf: 'flex-start' }}>
