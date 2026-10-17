@@ -32,6 +32,8 @@
 
   border: 1px solid #6a0bff;
   border-radius: 16px !important; 
+
+  max-width: 392px;
 }
 .guru__wrapper {
   display: flex;
