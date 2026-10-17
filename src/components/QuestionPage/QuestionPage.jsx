@@ -1,6 +1,7 @@
 import { API_BASE } from '../../apiCondig';
 import axios from 'axios';
 import styles from './QuestionPage.module.css'
+import questions from './../Questions/Questions.module.css'
 import mainStyles from './../Main/Main.module.css'
 import parameters from './../Parameters/parameters.module.css'
 import imgExample from './../../assets/img/imgExample.png'
@@ -126,7 +127,7 @@ function QuestionPage() {
                 <div className={styles.questionPage__desc}>
                   <div className={styles.questionPage__titleParam}>
                     <h1 className={styles.questionPage__title}>{question.title}</h1> 
-                    <button className={styles.questions__openParamBtn} onClick={openSidebar}>
+                    <button className={questions.questions__openParamBtn} onClick={openSidebar}>
                       <img src={filterBtn} alt="filterBtn" />
                     </button>
                   </div>

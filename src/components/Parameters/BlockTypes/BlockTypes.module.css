@@ -59,3 +59,9 @@
 .guru__about {
   margin-bottom: 12px;
 }
+
+@media (max-width: 426px) {
+  .guru__main {
+    width: 340px;
+  }
+}
