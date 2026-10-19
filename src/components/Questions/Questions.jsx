@@ -4,7 +4,7 @@ import styles from './Questions.module.css'
 import mainStyles from './../Main/Main.module.css'
 import openParam from './../../assets/img/openParam.png'
 
-function Questions({ items, currentPage, totalPages, setCurrentPage, onOpenFilters }) {
+function Questions({ items, currentPage, onPageChange, totalPages, onOpenFilters }) {
    // Собираем плоский массив всех ID текущей страницы, например: [12, 15, 88, 104...]
   const allIdsOnPage = items.map(item => item.id);
 
@@ -46,7 +46,7 @@ function Questions({ items, currentPage, totalPages, setCurrentPage, onOpenFilte
         <Pagination 
           currentPage={currentPage}
           totalPages={totalPages}
-          setCurrentPage={setCurrentPage}
+          setCurrentPage={onPageChange}
         />
       </div>
     </>

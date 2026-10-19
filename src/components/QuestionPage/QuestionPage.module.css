@@ -100,7 +100,7 @@
 @media (max-width: 768px) {
   .questionPage__inner {
     max-width: 704px;
-    padding: 16px 16px 40px;
+    padding: 16px 16px 0;
   }
 }
 @media (max-width: 426px) {

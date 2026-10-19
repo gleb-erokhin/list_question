@@ -31,9 +31,9 @@
   color: #303030;
 
   border: 1px solid #6a0bff;
-  border-radius: 16px !important; 
+  border-radius: 16px !important;
 
-  max-width: 392px;
+  width: 392px;
 }
 .guru__wrapper {
   display: flex;
@@ -62,6 +62,16 @@
   margin-bottom: 12px;
 }
 
+@media (max-width: 1024px) {
+    .guru__main {
+    width: 704px;
+  }
+}
+@media (max-width: 768px) {
+  .guru__main {
+    width: 672px;
+  }
+}
 @media (max-width: 426px) {
   .guru__main {
     width: 340px;
