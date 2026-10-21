@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './../../Parameters/Parameters.module.css'
 
-const Grade = ({ title, items = [], activeSkills = [], setActiveSkills }) => {
+const Grade = ({ title, items = [], activeSkills = [], setActiveSkills, isDetailPage }) => {
   // const [tags, setTags] = useState([]);
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -50,15 +50,18 @@ const Grade = ({ title, items = [], activeSkills = [], setActiveSkills }) => {
           )
         })}
       </ul>
-      <button 
-        onClick={() => {
-          if (hasMoreThanFive) setIsExpanded(!isExpanded);
-        }}  
-        className={styles.toggleAllLink}
-        disabled={!hasMoreThanFive}
-      >
-        {isExpanded ? 'Свернуть' : 'Посмотреть всё'}
-      </button>
+      {
+        !isDetailPage && 
+        <button 
+          onClick={() => {
+            if (hasMoreThanFive) setIsExpanded(!isExpanded);
+          }}  
+          className={styles.toggleAllLink}
+          disabled={!hasMoreThanFive}
+        >
+          {isExpanded ? 'Свернуть' : 'Посмотреть всё'}
+        </button>
+      }
     </div>
   )
 }

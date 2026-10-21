@@ -12,7 +12,7 @@
   align-items: center;
 
   width: 100%;
-  padding: 24px;
+  padding: 16px 16px 24px;
   border: none;
   cursor: pointer;
   text-align: left;
@@ -31,13 +31,13 @@
 }
 /* Создаем псевдоэлемент "точка" перед текстом */
 .spoiler__title::before {
-  content: "";           /* Обязательное свойство, иначе псевдоэлемент не отобразится */
+  content: ""; /* Обязательное свойство, иначе псевдоэлемент не отобразится */
   display: inline-block; /* Позволяет задавать размеры элементу */
-  width: 8px;            /* Ширина 8px */
-  height: 8px;           /* Высота 8px */
-  background-color: #5533FF;/* Цвет точки (можете заменить на любой нужный, например #007bff) */
-  border-radius: 50%;    /* Делает квадрат круглым */
-  flex-shrink: 0;        /* Запрещает точке сжиматься, если текст заголовка слишком длинный */
+  width: 8px; /* Ширина 8px */
+  height: 8px; /* Высота 8px */
+  background-color: #5533ff; /* Цвет точки (можете заменить на любой нужный, например #007bff) */
+  border-radius: 50%; /* Делает квадрат круглым */
+  flex-shrink: 0; /* Запрещает точке сжиматься, если текст заголовка слишком длинный */
 }
 /* Анимация стрелочки */
 .spoiler__arrow {
@@ -115,7 +115,7 @@
 }
 .spoiler__marker span {
   border-radius: 4px;
-  padding: 2px 4px;
+  padding: 3px 5px;
   min-width: 17px;
   height: 21px;
   background: #6a0bff;
@@ -123,4 +123,37 @@
 }
 .spoiler__img {
   padding-bottom: 24px;
+}
+.spoiler__more {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.spoiler__levels_padding {
+  padding: 0;
+}
+.spoiler__levels_padding > .spoiler__levels_block {
+  gap: 16px;
+}
+@media (max-width: 425px) {
+  .spoiler__title {
+    font-size: 16px;
+    line-height: 130%;
+  }
+  .spoiler__header {
+    padding: 20px 10px 16px;
+  }
+  .spoiler__levels {
+    font-size: 12px;
+  }
+  .spoiler__levels_block {
+    gap: 16px;
+  }
+  .spoiler__img {
+    padding-bottom: 16px;
+  }
 }
