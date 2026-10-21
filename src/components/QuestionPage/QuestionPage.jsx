@@ -3,7 +3,7 @@ import axios from 'axios';
 import styles from './QuestionPage.module.css'
 import questions from './../Questions/Questions.module.css'
 import mainStyles from './../Main/Main.module.css'
-import parameters from './../Parameters/parameters.module.css'
+import parameters from './../Parameters/Parameters.module.css'
 import imgExample from './../../assets/img/imgExample.png'
 import filterBtn from './../../assets/img/filterBtn.png'
 import { useEffect, useState } from 'react';
