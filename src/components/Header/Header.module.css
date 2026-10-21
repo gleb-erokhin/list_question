@@ -43,11 +43,11 @@
   color: #191919;
 }
 .header__navLink_active {
-  color: #0066cc; /* Синий цвет для активной страницы */
+  color: #6a0bff; /* Синий цвет для активной страницы */
   font-weight: 600; /* Делаем шрифт жирнее */
 }
 .header__navListItem a:hover {
-  color: #0066cc;
+  color: #6a0bff;
 }
 /* Шапка спойлера на десктопе полностью скрыта */
 .header__navHeader {
