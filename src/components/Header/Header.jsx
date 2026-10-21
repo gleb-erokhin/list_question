@@ -2,7 +2,7 @@ import styles from './Header.module.css'
 import logo from '../../assets/img/logo.svg'
 import yeahub from '../../assets/img/yeahub.png'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import AuthButtons from './AuthButton/AuthButtons'
 
 function Header() {
@@ -21,6 +21,10 @@ function Header() {
     setIsMenuOpen(false);
     setIsNavOpen(false);
   };
+
+  // Вспомогательная функция для динамических классов CSS-модулей
+  const setActiveClass = ({ isActive }) => 
+    `${styles.header__navLink} ${isActive ? styles.header__navLink_active : ''}`
 
   return (
     <header className={styles.header}>
@@ -47,10 +51,10 @@ function Header() {
           </div>
 
           <ul className={styles.header__navList}>
-            <li className={styles.header__navListItem}><Link to="/" onClick={closeAll}>База вопросов</Link></li>
-            <li className={styles.header__navListItem}><Link to="/training" onClick={closeAll}>Тренажёр</Link></li>
-            <li className={styles.header__navListItem}><Link to="/docs" onClick={closeAll}>Материалы</Link></li>
-            <li className={styles.header__navListItem}><Link to="/skils" onClick={closeAll}>Навыки (hh)</Link></li>
+            <li className={styles.header__navListItem}><NavLink to="/" className={setActiveClass} onClick={closeAll}>База вопросов</NavLink></li>
+            <li className={styles.header__navListItem}><NavLink to="/training" className={setActiveClass} onClick={closeAll}>Тренажёр</NavLink></li>
+            <li className={styles.header__navListItem}><NavLink to="/docs" className={setActiveClass} onClick={closeAll}>Материалы</NavLink></li>
+            <li className={styles.header__navListItem}><NavLink to="/skils" className={setActiveClass} onClick={closeAll}>Навыки (hh)</NavLink></li>
           </ul>
         </nav>
 
