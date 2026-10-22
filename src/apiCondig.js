@@ -6,6 +6,12 @@
 
 // В режиме разработки используем прямой URL. 
 // На Vercel пропускаем через прокси, который уберет ошибку CORS в браузере.
+// export const API_BASE = import.meta.env.DEV
+//   ? 'https://api.yeatwork.ru'
+//   : 'https://api.allorigins.win/raw?url=https://api.yeatwork.ru';
+
+const TARGET_API = 'https://api.yeatwork.ru';
+
 export const API_BASE = import.meta.env.DEV
-  ? 'https://api.yeatwork.ru'
-  : 'https://api.allorigins.win/raw?url=https://api.yeatwork.ru';
+  ? TARGET_API
+  : 'https://api.allorigins.win/raw?url=' + encodeURIComponent(TARGET_API);
