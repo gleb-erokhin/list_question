@@ -92,7 +92,7 @@ function QuestionPage() {
       });
     });
   }
-
+ 
   return (
   <main className={`${mainStyles.main} ${mainStyles.main_qst}`}>
     <Link to="/" className={`${styles.questionPage__backBtn} ${mainStyles.detailsLink}`}>

@@ -5,6 +5,7 @@
   position: relative;
   overflow: hidden;
   animation: pulse 1.5s infinite ease-in-out;
+  width: 704px;
 }
 /* Анимация плавного мерцания */
 @keyframes pulse {
