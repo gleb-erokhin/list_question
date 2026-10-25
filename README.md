@@ -1,21 +1,30 @@
 # YeahuB приложение.
 
 Работа по проекту. 
-отработка навыков разработки на React + API по загрузке данных с внешнего источника.
+отработка навыков разработки на React + Vite + API по загрузке данных с внешнего источника.
 
-# React + Vite
+## Стек
+Разработка сделана на React + Vite + JS + CSS.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Краткая информация проекта
+- Главная страница показывает по 10 вопросов, остальное доступно через пагинацию
+- Есть поиск по ключевым словам, а так же кнопки: Навыки, Специализация, Сложность
+- В списке вопросов показаны обобщенные ответы на каждый вопрос.
+- Внутри каждого вопроса есть полный ответ, а так же можно двигаться по вопросам на странице не выходя Назад
 
-Currently, two official plugins are available:
+## Запуск исходников и CORS
+- Исходники запускаются стандартно: npm run dev
+- CORS реализован путем отказа от запроса напрямую в api.yeatwork.ru, вместо этого работаем по относительному пути.
+* В apiConfig.js - указываем относительный путь /api
+* В локальной работе Vite удаляет /api и подстваляет к localhost нужный нам /questions (файл ./vite.config.js)
+* В продакшене Vercel работает с маской :path (файл ./vercel.json)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Структура папок
+* **assets** - картинки на весь проект
+* **componentes\Hooks\useSidebar.js** - полностью инкапсулирует логику мобильного адаптива для выезжающих панелей и обеспечивает стабильность верстки сайта.
+* **componentes\Hooks\useQuestionsFilter.js** - выполняет роль изолированного ядра управления данными главной страницы. Он берет на себя всю «грязную» работу с сервером и фильтрами, отдавая наружу чистый результат.
+* **componentes** - включает отдельные компоненты, верстки страницы, Скелетона, страницы с вопросом, Параметров и Пагинации.
+* **docs** - Полная документация проекта, описание отдельных компонентов и как они взаимодействуют. 
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Продакшин
+Проект настроен на Vercel. Настройки по умолчанию.
