@@ -107,6 +107,8 @@
     right: 0px;
     top: 65px;
     height: auto;
+    max-height: 100vh;
+    padding-bottom: 100px;
     border-radius: 0;
     box-shadow: 0 4px 10px 0 rgba(106, 99, 118, 0.1);
 
