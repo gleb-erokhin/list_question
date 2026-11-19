@@ -1,4 +1,5 @@
 import { API_BASE } from '../../apiCondig';
+import { sanitizeAnswerContent } from '../utils/sanitizeContent';
 import axios from 'axios';
 import styles from './QuestionPage.module.css'
 import questions from './../Questions/Questions.module.css'
@@ -26,18 +27,6 @@ function QuestionPage() {
   // ПОДКЛЮЧАЕМ УНИВЕРСАЛЬНЫЙ ХУК для sideBar
   const { isSidebarOpen, setIsSidebarOpen, openSidebar, closeSidebar } = useSidebar();
 
-  // Хелпер декодирования HTML (тот же, что мы делали для MainPage)
-  const decodeHtmlString = (htmlStr) => {
-    if (typeof htmlStr !== 'string') return '';
-    let cleanStr = htmlStr.replace(/^["']|["']\$/g, '');
-    if (typeof window !== 'undefined') {
-      const txt = document.createElement('textarea');
-      txt.innerHTML = cleanStr;
-      cleanStr = txt.value;
-    }
-    return cleanStr;
-  };
-
   // ЭФФЕКТ ДЛЯ ЗАПРОСА ДАННЫХ. Срабатывает один раз при загрузке этой страницы
   useEffect(() => {
     // Делаем запрос к API конкретно для ОДНОГО вопроса по его ID
@@ -50,8 +39,8 @@ function QuestionPage() {
         // Сброс кнопок, инкапсулирован внутри дочернего QuestionAnswerBlock через [htmlContent]
         setQuestion({
           ...rawQuestion,
-          shortAnswer: decodeHtmlString(rawQuestion.shortAnswer),
-          longAnswer: decodeHtmlString(rawQuestion.longAnswer)
+          shortAnswer: sanitizeAnswerContent(rawQuestion.shortAnswer),
+          longAnswer: sanitizeAnswerContent(rawQuestion.longAnswer)
         });
       })
       .catch(err => {
