@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { API_BASE } from '../../apiCondig';
+import { sanitizeAnswerContent } from '../utils/sanitizeContent';
 import axios from 'axios';
 
 export default function useQuestionsFilter() {
@@ -18,18 +19,6 @@ export default function useQuestionsFilter() {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const debounceTimerRef = useRef(null);
-
-  // Функция декодирования HTML-тегов
-  const decodeHtmlString = (htmlStr) => {
-    if (typeof htmlStr !== 'string') return '';
-    let cleanStr = htmlStr.replace(/^["']|["']\$/g, '');
-    if (typeof window !== 'undefined') {
-      const txt = document.createElement('textarea');
-      txt.innerHTML = cleanStr;
-      cleanStr = txt.value;
-    }
-    return cleanStr;
-  };
 
   // 1. ЧИСТЫЙ ДЕБАУНС ПОИСКА (БЕЗ СБРОСА СТРАНИЦЫ ВНУТРИ)
   useEffect(() => {
@@ -50,8 +39,8 @@ export default function useQuestionsFilter() {
 
         const sanitizedData = rawData.map(item => ({
           ...item,
-          shortAnswer: decodeHtmlString(item.shortAnswer),
-          longAnswer: decodeHtmlString(item.longAnswer)
+          shortAnswer: sanitizeAnswerContent(item.shortAnswer),
+          longAnswer: sanitizeAnswerContent(item.longAnswer)
         }));
 
         setQuestions(sanitizedData);
