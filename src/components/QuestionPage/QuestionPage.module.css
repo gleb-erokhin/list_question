@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 20px;
   max-width: 704px;
+  width: 100%;
 }
 .questionPage__header {
   display: flex;
@@ -92,6 +93,18 @@
   flex-direction: column;
   gap: 20px;
 }
+.errorContainer {
+  max-width: 704px;
+}
+.errorContainerBlock h2, .errorContainerBlock p {
+  margin-bottom: 10px;
+}
+.errorContainerBlock {
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+
 @media (max-width: 1340px) {
   .questionPage__pading24 {
     padding: 16px;
