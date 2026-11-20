@@ -16,24 +16,27 @@ import QuestionSlider from './QuestionSlider';
 import Guru from '../Parameters/BlockTypes/Guru';
 import useSidebar from './../Hooks/useSidebar'
 
+// 1. Внешний контроллер: мгновенно сбрасывает loading, error, question и закрывает шторку при смене id или нажатии «Повторить»
 function QuestionPage() {
-  // Извлекаем параметры окружения и навигации, Достаем ID вопроса из адресной строки (например, если URL /questions/2, то id = 2)
   const { id } = useParams();
 
-  // СОЗДАЕМ СОБСТВЕННЫЙ СТЕЙТ. Изначально данных нет (null)
+  return (
+    <QuestionContent
+      key={`${id}`}
+      id={id}
+    />
+  );
+}
+
+// 2. Внутренний компонент детальной страницы
+function QuestionContent({ id }) {
   const [question, setQuestion] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  // Храним ID вопроса, для которого последний запрос успешно/неуспешно завершился
-  const [loadedId, setLoadedId] = useState(null);
 
-  // Вычисляем loading без синхронного setState в эффекте
-  const loading = loadedId !== id;
-
-  // ПОДКЛЮЧАЕМ УНИВЕРСАЛЬНЫЙ ХУК для sideBar
   const { isSidebarOpen, openSidebar, closeSidebar } = useSidebar();
 
-  // ЭФФЕКТ ДЛЯ ЗАПРОСА ДАННЫХ. Срабатывает один раз при загрузке этой страницы
-useEffect(() => {
+  useEffect(() => {
     let isActive = true;
     const controller = new AbortController();
 
@@ -45,22 +48,30 @@ useEffect(() => {
         if (!isActive) return;
 
         const rawQuestion = response.data?.data || response.data;
+        if (!rawQuestion) {
+          setError('Вопрос не найден.');
+          setQuestion(null);
+          return;
+        }
+
         setQuestion({
           ...rawQuestion,
           shortAnswer: sanitizeAnswerContent(rawQuestion.shortAnswer),
           longAnswer: sanitizeAnswerContent(rawQuestion.longAnswer),
         });
         setError(null);
-        setLoadedId(id);
       })
       .catch((err) => {
-        // Если запрос был отменён при быстром клике на следующий вопрос — молча выходим
         if (!isActive || axios.isCancel(err) || err.name === 'CanceledError') return;
 
-        console.error('Ошибка загрузки вопроса:', err);
-        setError('Не удалось загрузить подробный ответ.');
+        console.error('Ошибка при загрузке вопроса:', err);
+        setError('Не удалось загрузить данные вопроса.');
         setQuestion(null);
-        setLoadedId(id);
+      })
+      .finally(() => {
+        if (isActive) {
+          setLoading(false);
+        }
       });
 
     return () => {
@@ -69,37 +80,26 @@ useEffect(() => {
     };
   }, [id]);
 
-  // =======================================================
-  // ЗАЩИЩЕННЫЙ ДИНАМИЧЕСКИЙ СБОР ПАРАМЕТРОВ ДЛЯ ЭТОГО ВОПРОСА
-  // Передаем в сборщик массив из одного вопроса, и код сам вытащит нужные ID и Title
-  // =======================================================
+  // Собираем теги текущего вопроса (безопасно через optional chaining)
   const uniqueSpecs = [];
+  const specMap = new Map();
+  question?.questionSpecializations?.forEach((spec) => {
+    const key = spec.id ?? spec.title;
+    if (!specMap.has(key)) {
+      specMap.set(key, true);
+      uniqueSpecs.push({ id: key, title: spec.title });
+    }
+  });
+
   const uniqueSkills = [];
-
-  // Защита: запускаем сборку ТОЛЬКО если question уже загрузился и не равен null
-  if (question) {
-    const singleQuestionArray = [question];
-    const specMap = new Map();
-    const skillMap = new Map();
-
-    singleQuestionArray.forEach(q => {
-      q.questionSpecializations?.forEach(spec => {
-        if (!specMap.has(spec.id)) {
-          specMap.set(spec.id, true);
-          uniqueSpecs.push({ id: spec.id, title: spec.title });
-        }
-      });
-    });
-
-    singleQuestionArray.forEach(q => {
-      q.questionSkills?.forEach(skill => {
-        if (!skillMap.has(skill.id)) {
-          skillMap.set(skill.id, true);
-          uniqueSkills.push({ id: skill.id, title: skill.title });
-        }
-      });
-    });
-  }
+  const skillMap = new Map();
+  question?.questionSkills?.forEach((skill) => {
+    const key = skill.id ?? skill.title;
+    if (!skillMap.has(key)) {
+      skillMap.set(key, true);
+      uniqueSkills.push({ id: key, title: skill.title });
+    }
+  });
  
   return (
   <main className={`${mainStyles.main} ${mainStyles.main_qst}`}>
@@ -117,16 +117,18 @@ useEffect(() => {
             <QuestionSkeleton />
           ) : error ? (
              /* Состояние ошибки: стейт error рендерится на экране */
-            <div className={styles.errorContainer}>
-              <h2>Упс! Произошла ошибка</h2>
-              <p className={styles.errorMessage}>{error}</p>
-              
+            <div className={`${styles.errorContainer}`}>
+              <div className={`${styles.errorContainerBlock} ${mainStyles.bcgColorWhite}`}>
+                <h2>Упс! Произошла ошибка</h2>
+                <p className={styles.errorMessage}>{error}</p>
+
+                <div className={styles.errorActions}>
+                  <Link to="/" className={styles.btnBackHome}>Вернуться на главную</Link>
+                </div>
+              </div>
+
               {/* Оставляем слайдер, чтобы пользователь мог переключиться на соседние рабочие ID */}
               <QuestionSlider id={id} />
-
-              <div className={styles.errorActions}>
-                <Link to="/" className={styles.btnBackHome}>Вернуться на главную</Link>
-              </div>
             </div>
           ) : (
             <>
