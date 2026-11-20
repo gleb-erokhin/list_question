@@ -1,4 +1,4 @@
-import { API_BASE } from '../../apiCondig';
+// import { API_BASE } from '../../apiCondig';
 import { sanitizeAnswerContent } from '../utils/sanitizeContent';
 import axios from 'axios';
 import styles from './QuestionPage.module.css'
@@ -19,36 +19,55 @@ import useSidebar from './../Hooks/useSidebar'
 function QuestionPage() {
   // Извлекаем параметры окружения и навигации, Достаем ID вопроса из адресной строки (например, если URL /questions/2, то id = 2)
   const { id } = useParams();
+
   // СОЗДАЕМ СОБСТВЕННЫЙ СТЕЙТ. Изначально данных нет (null)
   const [question, setQuestion] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  // Храним ID вопроса, для которого последний запрос успешно/неуспешно завершился
+  const [loadedId, setLoadedId] = useState(null);
+
+  // Вычисляем loading без синхронного setState в эффекте
+  const loading = loadedId !== id;
 
   // ПОДКЛЮЧАЕМ УНИВЕРСАЛЬНЫЙ ХУК для sideBar
-  const { isSidebarOpen, setIsSidebarOpen, openSidebar, closeSidebar } = useSidebar();
+  const { isSidebarOpen, openSidebar, closeSidebar } = useSidebar();
 
   // ЭФФЕКТ ДЛЯ ЗАПРОСА ДАННЫХ. Срабатывает один раз при загрузке этой страницы
-  useEffect(() => {
-    // Делаем запрос к API конкретно для ОДНОГО вопроса по его ID
-    axios.get(`${API_BASE}/questions/public-questions/${id}`)
-    .then(response => {
-      setLoading(true)
-      setIsSidebarOpen(false); // Сбрасываем шторку через метод хука при смене вопроса
-      // Достаем объект вопроса из ответа сервера
-      const rawQuestion = response.data.data || response.data;
-        // Сброс кнопок, инкапсулирован внутри дочернего QuestionAnswerBlock через [htmlContent]
+useEffect(() => {
+    let isActive = true;
+    const controller = new AbortController();
+
+    axios
+      .get(`/api/questions/public-questions/${id}`, {
+        signal: controller.signal,
+      })
+      .then((response) => {
+        if (!isActive) return;
+
+        const rawQuestion = response.data?.data || response.data;
         setQuestion({
           ...rawQuestion,
           shortAnswer: sanitizeAnswerContent(rawQuestion.shortAnswer),
-          longAnswer: sanitizeAnswerContent(rawQuestion.longAnswer)
+          longAnswer: sanitizeAnswerContent(rawQuestion.longAnswer),
         });
+        setError(null);
+        setLoadedId(id);
       })
-      .catch(err => {
-        console.error('Ошибка при загрузке:', err);
+      .catch((err) => {
+        // Если запрос был отменён при быстром клике на следующий вопрос — молча выходим
+        if (!isActive || axios.isCancel(err) || err.name === 'CanceledError') return;
+
+        console.error('Ошибка загрузки вопроса:', err);
         setError('Не удалось загрузить подробный ответ.');
-      })
-      .finally(() => setLoading(false));
-  }, [id, setIsSidebarOpen]); // Эффект перезапустится, если id в URL изменится
+        setQuestion(null);
+        setLoadedId(id);
+      });
+
+    return () => {
+      isActive = false;
+      controller.abort();
+    };
+  }, [id]);
 
   // =======================================================
   // ЗАЩИЩЕННЫЙ ДИНАМИЧЕСКИЙ СБОР ПАРАМЕТРОВ ДЛЯ ЭТОГО ВОПРОСА
