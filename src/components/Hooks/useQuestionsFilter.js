@@ -8,6 +8,8 @@ export function useQuestionsFilter() {
   const [error, setError] = useState(null);
   // Храним ключ последнего завершённого запроса вместо синхронного setLoading(true)
   const [completedQueryKey, setCompletedQueryKey] = useState('');
+  // Счётчик для принудительного повтора запроса при ошибке
+  const [retryCount, setRetryCount] = useState(0);
 
   // Справочники для блока Parameters (не зависят от текущей страницы)
   const [uniqueSpecs, setUniqueSpecs] = useState([]);
@@ -89,8 +91,8 @@ export function useQuestionsFilter() {
     ...(activeRatings.length > 0 && { rate: activeRatings.join(',') }),
   };
 
-  const currentQueryKey = JSON.stringify(queryParams);
-  // Пока ключ текущего запроса не совпал с завершённым — идёт загрузка (без лишнего ререндера!)
+  // Включаем retryCount в ключ, чтобы при нажатии «Повторить» loading снова стал true и эффект перезапустился
+  const currentQueryKey = JSON.stringify({ ...queryParams, retryCount });
   const loading = completedQueryKey !== currentQueryKey;
 
   // 3. Серверная фильтрация и пагинация вопросов с двойной защитой от гонки
@@ -127,6 +129,9 @@ export function useQuestionsFilter() {
         if (!isActive || axios.isCancel(err) || err.name === 'CanceledError') return;
 
         console.error('Ошибка при получении вопросов:', err);
+        // Очищаем старые вопросы, чтобы устаревший список не оставался на экране при сбое API
+        setQuestions([]);
+        setTotalPages(1);
         setError('Не удалось загрузить вопросы.');
         setCompletedQueryKey(currentQueryKey);
       });
@@ -147,6 +152,23 @@ export function useQuestionsFilter() {
   // Декоратор для сброса текущей страницы на 1 при изменении любого фильтра
   const createFilterSetter = (setter) => (value) => {
     setter(value);
+    setCurrentPage(1);
+  };
+
+  // Функция повторного запроса для кнопки «Повторить»
+  const retry = () => {
+    setRetryCount((prev) => prev + 1);
+  };
+
+  // Функция сброса всех фильтров для пустого состояния
+  const resetAllFilters = () => {
+    setActiveSpecializations([]);
+    setActiveSkills([]);
+    setActiveDifficulties([]);
+    setActiveRatings([]);
+    setActiveStatus('Все');
+    setSearchQuery('');
+    setDebouncedSearchQuery('');
     setCurrentPage(1);
   };
 
@@ -171,6 +193,8 @@ export function useQuestionsFilter() {
     filteredQuestions,
     loading,
     error,
+    retry,
+    resetAllFilters,
     currentPage,
     totalPages,
     setCurrentPage,

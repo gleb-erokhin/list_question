@@ -140,6 +140,89 @@ iframe {
 .display {
   display: flex;
 }
+
+/* Блоки состояний (ошибка и пустой результат) */
+.stateBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+  border: 1px solid #ececec;
+  border-radius: 12px;
+  gap: 10px;
+}
+
+.stateTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #191919;
+}
+
+.stateText {
+  margin: 0;
+  font-size: 14px;
+  color: #6a6a6a;
+  max-width: 420px;
+}
+
+.stateBtn {
+  margin-top: 8px;
+  padding: 10px 20px;
+  background-color: #6a0bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.stateBtn:hover {
+  background-color: #5308cc;
+}
+
+/* Скелетон-карточки при загрузке */
+.skeletonCard {
+  padding: 18px 20px;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeletonTitle {
+  height: 20px;
+  width: 75%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #f2f2f2 25%, #e6e6e6 50%, #f2f2f2 75%);
+  background-size: 200% 100%;
+  animation: skeletonPulse 1.4s infinite ease-in-out;
+}
+
+.skeletonMeta {
+  height: 14px;
+  width: 35%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #f2f2f2 25%, #e6e6e6 50%, #f2f2f2 75%);
+  background-size: 200% 100%;
+  animation: skeletonPulse 1.4s infinite ease-in-out;
+}
+
+@keyframes skeletonPulse {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+
 @media (max-width: 1340px) {
   .questions {
     max-width: 704px;

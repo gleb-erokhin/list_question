@@ -11,6 +11,10 @@ function Main() {
   // Автономная логика фильтрации и пагинации данных
   const { 
     filteredQuestions, 
+    loading, 
+    error,
+    retry,
+    resetAllFilters,
     currentPage, 
     setCurrentPage, 
     totalPages, 
@@ -25,6 +29,10 @@ function Main() {
         {/* 4. Отдаем списку вопросов уже отфильтрованный массив, данные серверной пагинации */}
         <Qestions 
           items={filteredQuestions} 
+          loading={loading}
+          error={error}
+          onRetry={retry}
+          onResetFilters={resetAllFilters}
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={setCurrentPage}
