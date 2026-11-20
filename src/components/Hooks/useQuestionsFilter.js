@@ -1,144 +1,174 @@
+// src/hooks/useQuestionsFilter.js
 import { useState, useEffect, useRef } from 'react';
-import { API_BASE } from '../../apiCondig';
-import { sanitizeAnswerContent } from '../utils/sanitizeContent';
 import axios from 'axios';
+import { sanitizeAnswerContent } from '../utils/sanitizeContent';
 
-export default function useQuestionsFilter() {
-  // 1. Метаданные пагинации с сервера
+export function useQuestionsFilter() {
   const [questions, setQuestions] = useState([]);
+  const [error, setError] = useState(null);
+  // Храним ключ последнего завершённого запроса вместо синхронного setLoading(true)
+  const [completedQueryKey, setCompletedQueryKey] = useState('');
+
+  // Справочники для блока Parameters (не зависят от текущей страницы)
+  const [uniqueSpecs, setUniqueSpecs] = useState([]);
+  const [uniqueSkills, setUniqueSkills] = useState([]);
+
+  // Пагинация
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  // 2. Стейты фильтров-кнопок
+  // Активные фильтры
   const [activeSpecializations, setActiveSpecializations] = useState([]);
   const [activeSkills, setActiveSkills] = useState([]);
   const [activeDifficulties, setActiveDifficulties] = useState([]);
   const [activeRatings, setActiveRatings] = useState([]);
+  const [activeStatus, setActiveStatus] = useState('Все');
 
-  // 3. Поиск и Дебаунс
+  // Поиск с дебаунсом
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const debounceTimerRef = useRef(null);
 
-  // 1. ЧИСТЫЙ ДЕБАУНС ПОИСКА (БЕЗ СБРОСА СТРАНИЦЫ ВНУТРИ)
+  // 1. Загрузка полных справочников специализаций и навыков (1 раз при старте)
+  useEffect(() => {
+    const fetchDictionaries = async () => {
+      try {
+        const [specsRes, skillsRes] = await Promise.all([
+          axios.get('/api/specializations'),
+          axios.get('/api/skills'),
+        ]);
+
+        const rawSpecs = Array.isArray(specsRes.data)
+          ? specsRes.data
+          : specsRes.data?.data || [];
+
+        const rawSkills = Array.isArray(skillsRes.data)
+          ? skillsRes.data
+          : skillsRes.data?.data || [];
+
+        setUniqueSpecs(rawSpecs);
+        setUniqueSkills(rawSkills);
+      } catch (err) {
+        console.error('Ошибка загрузки справочников:', err);
+      }
+    };
+
+    fetchDictionaries();
+  }, []);
+
+  // 2. Дебаунс поискового запроса (400 мс)
   useEffect(() => {
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
     }
+
     debounceTimerRef.current = setTimeout(() => {
       setDebouncedSearchQuery(searchQuery);
     }, 400);
+
     return () => clearTimeout(debounceTimerRef.current);
   }, [searchQuery]);
 
-  // 2. ЭФФЕКТ ДЛЯ ЗАПРОСОВ К СЕРВЕРУ (Зависит СТРОГО от страницы и дебаунса)
-  useEffect(() => {
-    axios.get(`${API_BASE}/questions/public-questions?page=${currentPage}&title=${encodeURIComponent(debouncedSearchQuery)}`)
-      .then(response => {
-        const rawData = response.data.data || [];
+  // Вычисляем параметры и уникальный ключ запроса прямо при рендере
+  const expandedComplexities = activeDifficulties.flatMap((range) => {
+    const [min, max] = range.split('-').map((num) => parseInt(num.trim(), 10));
+    const result = [];
+    for (let i = min; i <= max; i++) {
+      result.push(i);
+    }
+    return result;
+  });
 
-        const sanitizedData = rawData.map(item => ({
+  const queryParams = {
+    page: currentPage,
+    limit: 10,
+    ...(debouncedSearchQuery.trim() && { title: debouncedSearchQuery.trim() }),
+    ...(activeSpecializations.length > 0 && { specializationId: activeSpecializations.join(',') }),
+    ...(activeSkills.length > 0 && { skills: activeSkills.join(',') }),
+    ...(expandedComplexities.length > 0 && { complexity: expandedComplexities.join(',') }),
+    ...(activeRatings.length > 0 && { rate: activeRatings.join(',') }),
+  };
+
+  const currentQueryKey = JSON.stringify(queryParams);
+  // Пока ключ текущего запроса не совпал с завершённым — идёт загрузка (без лишнего ререндера!)
+  const loading = completedQueryKey !== currentQueryKey;
+
+  // 3. Серверная фильтрация и пагинация вопросов (без синхронного setState в теле эффекта)
+  useEffect(() => {
+    const controller = new AbortController();
+
+    axios
+      .get('/api/questions/public-questions', {
+        params: JSON.parse(currentQueryKey),
+        signal: controller.signal,
+      })
+      .then((response) => {
+        const rawData = response.data?.data || [];
+
+        const sanitizedData = rawData.map((item, index) => ({
           ...item,
           shortAnswer: sanitizeAnswerContent(item.shortAnswer),
-          longAnswer: sanitizeAnswerContent(item.longAnswer)
+          longAnswer: sanitizeAnswerContent(item.longAnswer),
+          isLearned: typeof item.isLearned === 'boolean' ? item.isLearned : index % 2 === 0,
         }));
 
         setQuestions(sanitizedData);
+        setError(null);
 
-        const totalItems = response.data.total || 0;
-        const limitPerPage = response.data.limit || 10;
-        const calculatedPages = Math.ceil(totalItems / limitPerPage);
-
-        setTotalPages(calculatedPages || 1);
+        const totalItems = response.data?.total || 0;
+        const limitPerPage = response.data?.limit || 10;
+        setTotalPages(Math.max(1, Math.ceil(totalItems / limitPerPage)));
+        setCompletedQueryKey(currentQueryKey);
       })
-      .catch(error => console.error('Ошибка при запросе:', error));
-  }, [currentPage, debouncedSearchQuery]);
-
-  // 3. СБОРЩИКИ УНИКАЛЬНЫХ КНОПОК ДЛЯ PARAMETERS
-  const uniqueSpecs = [];
-  const specMap = new Map();
-  questions.forEach(q => {
-    q.questionSpecializations?.forEach(spec => {
-      if (!specMap.has(spec.id)) {
-        specMap.set(spec.id, true);
-        uniqueSpecs.push({ id: spec.id, title: spec.title });
-      }
-    });
-  });
-
-  const uniqueSkills = [];
-  const skillMap = new Map();
-  questions.forEach(q => {
-    q.questionSkills?.forEach(skill => {
-      if (!skillMap.has(skill.id)) {
-        skillMap.set(skill.id, true);
-        uniqueSkills.push({ id: skill.id, title: skill.title });
-      }
-    });
-  });
-
-  // 4. ВАША ГЛУБОКАЯ КЛИЕНТСКАЯ ФИЛЬТРАЦИЯ ВОПРОСОВ
-  const filteredQuestions = questions.filter(question => {
-    const matchSpecs = activeSpecializations.length === 0 ||
-      question.questionSpecializations?.some(s => activeSpecializations.includes(s.id));
-
-    const matchSkills = activeSkills.length === 0 ||
-      question.questionSkills?.some(s => activeSkills.includes(s.id));
-
-    const matchDifficulty = activeDifficulties.length === 0 ||
-      activeDifficulties.some(range => {
-        const [min, max] = range.split('-').map(num => parseInt(num.trim(), 10));
-        const comp = question.complexity;
-        return comp >= min && comp <= max;
+      .catch((err) => {
+        if (!axios.isCancel(err)) {
+          console.error('Ошибка при получении вопросов:', err);
+          setError('Не удалось загрузить вопросы.');
+          setCompletedQueryKey(currentQueryKey);
+        }
       });
 
-    const matchRating = activeRatings.length === 0 ||
-      activeRatings.includes(question.rate);
+    return () => controller.abort();
+  }, [currentQueryKey]);
 
-    return matchSpecs && matchSkills && matchDifficulty && matchRating;
+  // Пост-фильтрация по статусу (пока нет JWT-авторизации)
+  const filteredQuestions = questions.filter((question) => {
+    if (activeStatus === 'Изученные') return question.isLearned === true;
+    if (activeStatus === 'Не изученные') return question.isLearned === false;
+    return true;
   });
+
+  // Декоратор для сброса текущей страницы на 1 при изменении любого фильтра
+  const createFilterSetter = (setter) => (value) => {
+    setter(value);
+    setCurrentPage(1);
+  };
+
+  const filterState = {
+    specializations: uniqueSpecs,
+    skills: uniqueSkills,
+    activeSpecializations,
+    setActiveSpecializations: createFilterSetter(setActiveSpecializations),
+    activeSkills,
+    setActiveSkills: createFilterSetter(setActiveSkills),
+    activeDifficulties,
+    setActiveDifficulties: createFilterSetter(setActiveDifficulties),
+    activeRatings,
+    setActiveRatings: createFilterSetter(setActiveRatings),
+    activeStatus,
+    setActiveStatus: createFilterSetter(setActiveStatus),
+    searchQuery,
+    setSearchQuery: createFilterSetter(setSearchQuery),
+  };
 
   return {
     filteredQuestions,
+    loading,
+    error,
     currentPage,
-    setCurrentPage, // Отдаем чистый, оригинальный сеттер для пагинации
     totalPages,
-
-    // ПРЕДОТВРАЩАЕМ КАСКАДЫ: Сброс страницы происходит ТОЛЬКО в момент явного вызова функций фильтрации пользователем
-    filterState: {
-      activeSpecializations,
-      setActiveSpecializations: (val) => {
-        setCurrentPage(1);
-        setActiveSpecializations(val);
-      },
-
-      activeSkills,
-      setActiveSkills: (val) => {
-        setCurrentPage(1);
-        setActiveSkills(val);
-      },
-
-      activeDifficulties,
-      setActiveDifficulties: (val) => {
-        setCurrentPage(1);
-        setActiveDifficulties(val);
-      },
-
-      activeRatings,
-      setActiveRatings: (val) => {
-        setCurrentPage(1);
-        setActiveRatings(val);
-      },
-
-      specializations: uniqueSpecs,
-      skills: uniqueSkills,
-
-      searchQuery,
-      setSearchQuery: (val) => {
-        // Проверяем: если функция поиска вызвана из инпута (изменение текста), сбрасываем страницу на 1-ю
-        setCurrentPage(1);
-        setSearchQuery(val);
-      }
-    }
+    setCurrentPage,
+    filterState,
   };
 }
+export default useQuestionsFilter;
