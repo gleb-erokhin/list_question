@@ -93,8 +93,9 @@ export function useQuestionsFilter() {
   // Пока ключ текущего запроса не совпал с завершённым — идёт загрузка (без лишнего ререндера!)
   const loading = completedQueryKey !== currentQueryKey;
 
-  // 3. Серверная фильтрация и пагинация вопросов (без синхронного setState в теле эффекта)
+  // 3. Серверная фильтрация и пагинация вопросов с двойной защитой от гонки
   useEffect(() => {
+    let isActive = true;
     const controller = new AbortController();
 
     axios
@@ -103,8 +104,9 @@ export function useQuestionsFilter() {
         signal: controller.signal,
       })
       .then((response) => {
-        const rawData = response.data?.data || [];
+        if (!isActive) return;
 
+        const rawData = response.data?.data || [];
         const sanitizedData = rawData.map((item, index) => ({
           ...item,
           shortAnswer: sanitizeAnswerContent(item.shortAnswer),
@@ -121,14 +123,18 @@ export function useQuestionsFilter() {
         setCompletedQueryKey(currentQueryKey);
       })
       .catch((err) => {
-        if (!axios.isCancel(err)) {
-          console.error('Ошибка при получении вопросов:', err);
-          setError('Не удалось загрузить вопросы.');
-          setCompletedQueryKey(currentQueryKey);
-        }
+        // Игнорируем отмену запроса и устаревшие эффекты
+        if (!isActive || axios.isCancel(err) || err.name === 'CanceledError') return;
+
+        console.error('Ошибка при получении вопросов:', err);
+        setError('Не удалось загрузить вопросы.');
+        setCompletedQueryKey(currentQueryKey);
       });
 
-    return () => controller.abort();
+    return () => {
+      isActive = false;
+      controller.abort();
+    };
   }, [currentQueryKey]);
 
   // Пост-фильтрация по статусу (пока нет JWT-авторизации)
