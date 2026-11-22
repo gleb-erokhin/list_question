@@ -3,9 +3,14 @@ import styles from './Pagination.module.css'
 function Pagination({ currentPage, totalPages, setCurrentPage = () => {} }) {
   // АЛГОРИТМ: ДВА ТРОЕТОЧИЯ С ИСХОДНОЙ ПЕРВОЙ И ПОСЛЕДНИМИ СТРАНИЦАМИ
   const getPageRange = () => {
+    // Если страниц 7 или меньше — выводим все цифры подряд без троеточий и обрезок
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, index) => index + 1);
+    }
+
     const range = [];
 
-    // 1. Первая страница ВСЕГДА должна быть на экране
+    // Первая страница ВСЕГДА должна быть на экране
     range.push(1);
 
     // Вычисляем границы центрального "окна" вокруг текущей страницы
@@ -16,37 +21,31 @@ function Pagination({ currentPage, totalPages, setCurrentPage = () => {} }) {
     // Дополнительная корректировка краев, чтобы в центре всегда было строго 3 цифры
     if (currentPage <= 3) {
       leftBound = 2;
-      rightBound = Math.min(totalPages - 1, 4);
+      rightBound = 4;
     }
-    if (currentPage >= totalPages - 2) {
-      leftBound = Math.max(2, totalPages - 3);
+
+    if (currentPage >= totalPages - 3) {
+      leftBound = totalPages - 4;
       rightBound = totalPages - 1;
     }
 
-    // 2. Ставим ПЕРВОЕ троеточие, если между '1' и началом центрального окна есть разрыв
+    // Ставим ПЕРВОЕ троеточие, если между '1' и началом центрального окна есть разрыв
     if (leftBound > 2) {
       range.push('...');
     }
 
-    // 3. Заполняем центральное скользящее окно (обычно 3 цифры)
+    // Заполняем центральное скользящее окно (обычно 3 цифры)
     for (let i = leftBound; i <= rightBound; i++) {
       range.push(i);
     }
 
-    // 4. Ставим ВТОРОЕ троеточие, если между концом центрального окна и тремя последними страницами есть разрыв
+    // Ставим ВТОРОЕ троеточие, если между концом центрального окна и тремя последними страницами есть разрыв
     // Так как в конце у нас зафиксированы три страницы (например, 171, 172, 173), разрыв проверяем до (totalPages - 2)
-    if (rightBound < totalPages - 3) {
+    if (rightBound < totalPages - 1) {
       range.push('...');
     }
 
-    // 5. Добавляем фиксированные последние 3 страницы (если они еще не вывелись в цикле)
-    if (totalPages > 3) {
-      const lastStart = Math.max(rightBound + 1, totalPages - 2);
-      for (let i = lastStart; i <= totalPages; i++) {
-        range.push(i);
-      }
-    }
-
+    range.push(totalPages)
     return range;
   };
 
