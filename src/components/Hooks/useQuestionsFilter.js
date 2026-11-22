@@ -164,11 +164,12 @@ export function useQuestionsFilter() {
         if (!isActive) return;
 
         const rawData = response.data?.data || [];
-        const sanitizedData = rawData.map((item, index) => ({
+        // убрали index
+        const sanitizedData = rawData.map((item) => ({
           ...item,
           shortAnswer: sanitizeAnswerContent(item.shortAnswer),
           longAnswer: sanitizeAnswerContent(item.longAnswer),
-          isLearned: typeof item.isLearned === 'boolean' ? item.isLearned : index % 2 === 0,
+          // isLearned: typeof item.isLearned === 'boolean' ? item.isLearned : index % 2 === 0,
         }));
 
         setQuestions(sanitizedData);
@@ -197,11 +198,15 @@ export function useQuestionsFilter() {
   }, [currentQueryKey]);
 
   // Пост-фильтрация по статусу
-  const filteredQuestions = questions.filter((question) => {
-    if (activeStatus === 'Изученные') return question.isLearned === true;
-    if (activeStatus === 'Не изученные') return question.isLearned === false;
-    return true;
-  });
+  const filteredQuestions = questions
+  {/* убрали на время отсутствия авторизации
+    const filteredQuestions = questions.filter((question) => {
+      if (activeStatus === 'Изученные') return question.isLearned === true;
+      if (activeStatus === 'Не изученные') return question.isLearned === false;
+      return true;
+    });
+    
+  */}
 
   // Сеттеры фильтров (поддерживают как прямое значение, так и функциональный коллбэк prev => next)
   const createArrayUrlSetter = (paramKey, currentArray) => (valueOrUpdater) => {
