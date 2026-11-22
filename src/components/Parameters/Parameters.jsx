@@ -11,7 +11,7 @@ function Parameters({ specializations, skills, activeSpecializations, setActiveS
   setActiveSkills, activeDifficulties, setActiveDifficulties, activeRatings, setActiveRatings, searchQuery,setSearchQuery, isDetailPage=false, question = null, isFiltersVisible, onCloseFilters }) {
     
   const difficult = ['1-3',' 4-6', '7-8', '9-10']
-  const status = ['Изученные', 'Не изученные', 'Все']
+  { /* const status = ['Изученные', 'Неизученные', 'Все']*/ }
   // console.log('2. Проводник specializations:', specializations);
 
   return (
@@ -78,9 +78,13 @@ function Parameters({ specializations, skills, activeSpecializations, setActiveS
           setActiveItems={setActiveRatings}
         />
       }
-      {
-        !isDetailPage &&
-        <Rank arrays={status} title='Статус' />
+      {/* Блок «Статус» временно скрыт до реализации авторизации и хранения прогресса пользователя
+        {
+          !isDetailPage &&
+          <Rank arrays={status} 
+          title='Статус' />
+        }
+      */     
       }
     </div>
   )
