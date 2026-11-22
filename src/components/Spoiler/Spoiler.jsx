@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import styles from './Spoiler.module.css'
 import mainStyles from './../Main/Main.module.css'
 
 
 function Spoiler({ id, title, children, spoilerImg, rate, complexity, allIdsOnPage }) {
+  const location = useLocation();
   // 2. Создаем состояние: по умолчанию спойлер закрыт (false)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -54,7 +55,8 @@ function Spoiler({ id, title, children, spoilerImg, rate, complexity, allIdsOnPa
             <div className={styles.spoiler__more} style={{ textAlign: 'right' }}>
               <Link 
                 to={`questions/${id}`} 
-                state={{ allIdsOnPage }} // Перевозим данные о соседях
+                // Сохраняем query-строку каталога (например, ?page=2&skills=5)
+                state={{ allIdsOnPage, fromSearch: location.search}} // Перевозим данные о соседях
                 className={mainStyles.detailsLink}
               >
                 Подробнее
