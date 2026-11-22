@@ -26,12 +26,12 @@ function QuestionSlider({id}) {
    // Обработчики кликов: теперь мы ОБЯЗАТЕЛЬНО пробрасываем allIdsOnPage дальше при каждом navigate
   const handlePrevQuestion = () => {
     if (prevId) {
-      navigate(`/questions/${prevId}`, { state: { allIdsOnPage } });
+      navigate(`/questions/${prevId}`, { state: { ...location.state, allIdsOnPage } });
     }
   };
   const handleNextQuestion = () => {
     if (nextId) {
-      navigate(`/questions/${nextId}`, { state: { allIdsOnPage } });
+      navigate(`/questions/${nextId}`, { state: { ...location.state, allIdsOnPage } });
     }
   };
 

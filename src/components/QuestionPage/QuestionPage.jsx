@@ -8,7 +8,7 @@ import parameters from './../Parameters/Parameters.module.css'
 import imgExample from './../../assets/img/imgExample.png'
 import filterBtn from './../../assets/img/filterBtn.png'
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import Parameters from '../Parameters/Parameters';
 import QuestionAnswerBlock from './QuestionAnswerBlock';
 import QuestionSkeleton from './../Skeleton/QuestionSkeleton';
@@ -19,17 +19,24 @@ import useSidebar from './../Hooks/useSidebar'
 // 1. Внешний контроллер: мгновенно сбрасывает loading, error, question и закрывает шторку при смене id или нажатии «Повторить»
 function QuestionPage() {
   const { id } = useParams();
-
+  
   return (
     <QuestionContent
-      key={`${id}`}
-      id={id}
+    key={`${id}`}
+    id={id}
     />
   );
 }
 
 // 2. Внутренний компонент детальной страницы
 function QuestionContent({ id }) {
+  const location = useLocation()
+
+    // Если пришли из каталога — вернём на исходную страницу с фильтрами, иначе на корень '/'
+  const backToCatalogUrl = location.state?.fromSearch
+    ? `/${location.state.fromSearch}`
+    : '/';
+
   const [question, setQuestion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -103,7 +110,7 @@ function QuestionContent({ id }) {
  
   return (
   <main className={`${mainStyles.main} ${mainStyles.main_qst}`}>
-    <Link to="/" className={`${styles.questionPage__backBtn} ${mainStyles.detailsLink}`}>
+    <Link to={backToCatalogUrl} className={`${styles.questionPage__backBtn} ${mainStyles.detailsLink}`}>
       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M12.9427 15.8078C13.0007 15.8659 13.0468 15.9348 13.0782 16.0107C13.1097 16.0865 13.1258 16.1679 13.1258 16.25C13.1258 16.3321 13.1097 16.4134 13.0782 16.4893C13.0468 16.5652 13.0007 16.6341 12.9427 16.6922C12.8846 16.7502 12.8157 16.7963 12.7398 16.8277C12.6639 16.8592 12.5826 16.8753 12.5005 16.8753C12.4184 16.8753 12.3371 16.8592 12.2612 16.8277C12.1853 16.7963 12.1164 16.7502 12.0583 16.6922L5.8083 10.4422C5.75019 10.3841 5.70409 10.3152 5.67264 10.2393C5.64119 10.1634 5.625 10.0821 5.625 9.99998C5.625 9.91785 5.64119 9.83652 5.67264 9.76064C5.70409 9.68477 5.75019 9.61584 5.8083 9.55779L12.0583 3.30779C12.1756 3.19052 12.3346 3.12463 12.5005 3.12463C12.6663 3.12463 12.8254 3.19052 12.9427 3.30779C13.06 3.42507 13.1258 3.58413 13.1258 3.74998C13.1258 3.91583 13.06 4.07489 12.9427 4.19217L7.13409 9.99998L12.9427 15.8078Z" fill="#6A0BFF" />
       </svg>
@@ -123,7 +130,7 @@ function QuestionContent({ id }) {
                 <p className={styles.errorMessage}>{error}</p>
 
                 <div className={styles.errorActions}>
-                  <Link to="/" className={styles.btnBackHome}>Вернуться на главную</Link>
+                  <Link to={backToCatalogUrl} className={styles.btnBackHome}>Вернуться на главную</Link>
                 </div>
               </div>
 
